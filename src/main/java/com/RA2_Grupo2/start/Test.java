@@ -4,7 +4,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		
-		// Open the user interface.
+		// Open the user interface
 
 	}
 
