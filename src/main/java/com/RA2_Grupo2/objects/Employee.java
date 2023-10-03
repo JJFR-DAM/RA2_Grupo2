@@ -2,7 +2,17 @@ package com.RA2_Grupo2.objects;
 
 public class Employee {
 
-	private String NIF, name, surname, address, email, password;
+	private int id;
+
+	private String NIF, name, surname, email, password;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getNIF() {
 		return NIF;
@@ -28,14 +38,6 @@ public class Employee {
 		this.surname = surname;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -52,12 +54,11 @@ public class Employee {
 		this.password = password;
 	}
 
-	public Employee(String nIF, String name, String surname, String address, String email) {
+	public Employee(String nIF, String name, String surname, String email) {
 		super();
 		NIF = nIF;
 		this.name = name;
 		this.surname = surname;
-		this.address = address;
 		this.email = email;
 	}
 

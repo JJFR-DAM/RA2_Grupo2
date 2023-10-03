@@ -2,7 +2,17 @@ package com.RA2_Grupo2.objects;
 
 public class Product {
 
-	private String name, description, price, category, image;
+	private String name, description, category, image;
+	private float price;
+	private int quantity, id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -20,12 +30,20 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public String getCategory() {
@@ -44,11 +62,12 @@ public class Product {
 		this.image = image;
 	}
 
-	public Product(String name, String description, String price, String category, String image) {
+	public Product(String name, String description, float price, int quantity, String category, String image) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.price = price;
+		this.quantity = quantity;
 		this.category = category;
 		this.image = image;
 	}
