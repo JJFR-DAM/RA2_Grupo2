@@ -1,6 +1,8 @@
 package com.RA2_Grupo2.windows;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -37,7 +39,7 @@ public class MainView extends JFrame {
 		// Windows Properties.
 
 		super(options[option] + "s");
-		setSize(720, 500);
+		setSize(720, 600);
 		WindowsPreset.windowPreset(this);
 
 		// Panels.
@@ -45,7 +47,7 @@ public class MainView extends JFrame {
 		ptable = new JPanel();
 		ptable.setBounds(0, 0, 565, 463);
 		pbutton = new JPanel();
-		pbutton.setBounds(563, 0, 143, 443);
+		pbutton.setBounds(563, 0, 140, 440);
 
 		// Table.
 
@@ -72,12 +74,15 @@ public class MainView extends JFrame {
 
 		// Buttons.
 
+		bHandler handler = new bHandler();
+
 		// Button for create.
 
 		bInsert = new JButton();
 		bInsert.setBounds(36, 55, 65, 65);
 		String description = "Insert a " + options[option] + " in the table";
 		WindowsPreset.buttonPreset(bInsert, description, "src/main/resources/icons/insertar.png");
+		bInsert.addActionListener(handler);
 
 		// Button for delete.
 
@@ -85,6 +90,7 @@ public class MainView extends JFrame {
 		bDelete.setBounds(36, 125, 65, 65);
 		description = "Delete a " + options[option] + " of the table";
 		WindowsPreset.buttonPreset(bDelete, description, "src/main/resources/icons/borrar.png");
+		bDelete.addActionListener(handler);
 
 		// Button for update.
 
@@ -92,6 +98,7 @@ public class MainView extends JFrame {
 		bUpdate.setBounds(40, 195, 65, 65);
 		description = "Update a " + options[option] + " of the table";
 		WindowsPreset.buttonPreset(bUpdate, description, "src/main/resources/icons/actualizar.png");
+		bUpdate.addActionListener(handler);
 
 		// Button for read.
 
@@ -99,12 +106,14 @@ public class MainView extends JFrame {
 		bDetails.setBounds(40, 265, 65, 65);
 		description = "Details a " + options[option] + " of the table";
 		WindowsPreset.buttonPreset(bDetails, description, "src/main/resources/icons/lupa.png");
+		bDetails.addActionListener(handler);
 
 		// Button for close the program.
 
 		bLogout = new JButton();
 		bLogout.setBounds(42, 380, 65, 65);
 		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
+		bLogout.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
@@ -142,6 +151,47 @@ public class MainView extends JFrame {
 
 	public static void setListT(ArrayList<Transaction> listT) {
 		MainView.listT = listT;
+	}
+
+	private class bHandler implements ActionListener {
+
+		@SuppressWarnings("unused")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(bInsert)) {
+				if (option == 0) {
+					InsertProductView ipv = new InsertProductView();
+				} else {
+					InsertSupplierView isv = new InsertSupplierView();
+				}
+
+			} else if (e.getSource().equals(bDelete)) {
+				if (option == 0) {
+
+				} else {
+
+				}
+
+			} else if (e.getSource().equals(bUpdate)) {
+				if (option == 0) {
+					UpdateProductView upv = new UpdateProductView();
+				} else {
+					UpdateSupplierView usv = new UpdateSupplierView();
+				}
+
+			} else if (e.getSource().equals(bDetails)) {
+				if (option == 0) {
+					// Crear vistas de detalles
+				} else {
+
+				}
+
+			} else if (e.getSource().equals(bLogout)) {
+				dispose();
+				LoginView lv = new LoginView();
+			}
+		}
+
 	}
 
 }
