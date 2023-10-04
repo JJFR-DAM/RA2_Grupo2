@@ -1,20 +1,16 @@
 package com.RA2_Grupo2.windows;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Employee;
 
 @SuppressWarnings("serial")
@@ -24,20 +20,13 @@ public class LoginView extends JFrame {
 	private JTextField tUser;
 	private JPasswordField tPass;
 	private JButton bSignIn, bSignUp;
-	private Color c = Color.LIGHT_GRAY;
-	private ArrayList<Employee> listE = new ArrayList<Employee>();
+	private static ArrayList<Employee> listE = new ArrayList<Employee>();
 
 	public LoginView() {
 
 		super("Login");
 		setSize(400, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setBackground(c);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		Image icon1 = Toolkit.getDefaultToolkit().getImage("src/main/resources/icons/icon.png");
-		setIconImage(icon1);
-		getContentPane().setLayout(null);
+		WindowsPreset.windowPreset(this);
 
 		lUser = new JLabel("Username: ");
 		lUser.setBounds(80, 50, 90, 25);
@@ -51,21 +40,15 @@ public class LoginView extends JFrame {
 		tPass.setBounds(200, 100, 150, 25);
 		tPass.setToolTipText("Enter Password");
 
+		bHandler handler = new bHandler();
+
 		bSignIn = new JButton();
 		bSignIn.setBounds(90, 160, 65, 65);
-		bSignIn.setToolTipText("Sign In");
-		bSignIn.setBackground(c);
-		bSignIn.setBorderPainted(false);
-		Icon ic = new ImageIcon("src/main/resources/icons/signin.png");
-		bSignIn.setIcon(ic);
+		WindowsPreset.buttonPreset(bSignIn, "Sign In", "src/main/resources/icons/signin.png", handler);
 
 		bSignUp = new JButton();
 		bSignUp.setBounds(245, 160, 65, 65);
-		bSignUp.setToolTipText("Sign Up");
-		bSignUp.setBackground(c);
-		bSignUp.setBorderPainted(false);
-		ic = new ImageIcon("src/main/resources/icons/signup.png");
-		bSignUp.setIcon(ic);
+		WindowsPreset.buttonPreset(bSignUp, "Sign up", "src/main/resources/icons/signup.png", handler);
 
 		getContentPane().add(lUser);
 		getContentPane().add(tUser);
@@ -77,27 +60,38 @@ public class LoginView extends JFrame {
 		setVisible(true);
 	}
 
+	public static ArrayList<Employee> getListE() {
+		return listE;
+	}
+
+	public static void setListE(ArrayList<Employee> listE) {
+		LoginView.listE = listE;
+	}
+
 	public class bHandler implements ActionListener {
-		@SuppressWarnings("deprecation")
+//		@SuppressWarnings("deprecation")
+		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(bSignIn)) {
-				for (Employee em : listE) {
-					try {
-						if (tUser.getText().toUpperCase().equals(em.getEmail().toUpperCase())
-								&& tPass.getText().equals(em.getPassword())) {
-							@SuppressWarnings("unused")
-							MainView mv = new MainView();
-						}
-
-					} catch (NullPointerException NPE) {
-					}
-
-				}
+				MainView mv = new MainView();
+				dispose();
+//				for (Employee em : listE) {
+//					try {
+//						if (tUser.getText().toUpperCase().equals(em.getEmail().toUpperCase())
+//								&& tPass.getText().equals(em.getPassword())) {
+//							@SuppressWarnings("unused")
+//							MainView mv = new MainView();
+//						}
+//
+//					} catch (NullPointerException NPE) {
+//					}
+//
+//				}
 
 			} else {
-				@SuppressWarnings("unused")
 				RegisterView rv = new RegisterView();
+				dispose();
 			}
 		}
 

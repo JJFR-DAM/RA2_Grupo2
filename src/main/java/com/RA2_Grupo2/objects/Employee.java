@@ -18,8 +18,8 @@ public class Employee {
 		return NIF;
 	}
 
-	public void setNIF(String nIF) {
-		NIF = nIF;
+	public void setNIF(String NIF) {
+		this.NIF = NIF;
 	}
 
 	public String getName() {
@@ -54,9 +54,9 @@ public class Employee {
 		this.password = password;
 	}
 
-	public Employee(String nIF, String name, String surname, String email) {
+	public Employee(String NIF, String name, String surname, String email) {
 		super();
-		NIF = nIF;
+		this.NIF = NIF;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
