@@ -44,11 +44,13 @@ public class LoginView extends JFrame {
 
 		bSignIn = new JButton();
 		bSignIn.setBounds(90, 160, 65, 65);
-		WindowsPreset.buttonPreset(bSignIn, "Sign In", "src/main/resources/icons/signin.png", handler);
+		bSignIn.addActionListener(handler);
+		WindowsPreset.buttonPreset(bSignIn, "Sign In", "src/main/resources/icons/signin.png");
 
 		bSignUp = new JButton();
 		bSignUp.setBounds(245, 160, 65, 65);
-		WindowsPreset.buttonPreset(bSignUp, "Sign up", "src/main/resources/icons/signup.png", handler);
+		WindowsPreset.buttonPreset(bSignUp, "Sign up", "src/main/resources/icons/signup.png");
+		bSignUp.addActionListener(handler);
 
 		getContentPane().add(lUser);
 		getContentPane().add(tUser);
@@ -89,7 +91,7 @@ public class LoginView extends JFrame {
 //
 //				}
 
-			} else {
+			} else if (e.getSource().equals(bSignUp)) {
 				RegisterView rv = new RegisterView();
 				dispose();
 			}

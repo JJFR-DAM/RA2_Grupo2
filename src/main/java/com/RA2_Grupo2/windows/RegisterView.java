@@ -66,11 +66,13 @@ public class RegisterView extends JFrame {
 
 		bBack = new JButton();
 		bBack.setBounds(90, 360, 65, 65);
-		WindowsPreset.buttonPreset(bBack, "Sign In", "src/main/resources/icons/volver.png", handler);
+		WindowsPreset.buttonPreset(bBack, "Sign In", "src/main/resources/icons/volver.png");
+		bBack.addActionListener(handler);
 
 		bRegister = new JButton();
 		bRegister.setBounds(245, 360, 65, 65);
-		WindowsPreset.buttonPreset(bRegister, "Sign up", "src/main/resources/icons/confirmar.png", handler);
+		WindowsPreset.buttonPreset(bRegister, "Sign up", "src/main/resources/icons/confirmar.png");
+		bRegister.addActionListener(handler);
 
 		getContentPane().add(lPass);
 		getContentPane().add(tPass);

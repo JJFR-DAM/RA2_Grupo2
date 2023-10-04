@@ -3,7 +3,6 @@ package com.RA2_Grupo2.methods;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,14 +25,13 @@ public class WindowsPreset {
 
 	}
 
-	public static void buttonPreset(JButton jb, String description, String path, ActionListener handler) {
+	public static void buttonPreset(JButton jb, String description, String path) {
 
 		jb.setToolTipText(description);
 		jb.setBackground(c);
 		jb.setBorderPainted(false);
 		Icon ic = new ImageIcon(path);
 		jb.setIcon(ic);
-		jb.addActionListener(handler);
 	}
 
 }

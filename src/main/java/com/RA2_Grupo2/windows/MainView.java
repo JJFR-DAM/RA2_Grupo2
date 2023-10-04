@@ -77,34 +77,34 @@ public class MainView extends JFrame {
 		bInsert = new JButton();
 		bInsert.setBounds(36, 55, 65, 65);
 		String description = "Insert a " + options[option] + " in the table";
-		WindowsPreset.buttonPreset(bInsert, description, "src/main/resources/icons/insertar.png", null);
+		WindowsPreset.buttonPreset(bInsert, description, "src/main/resources/icons/insertar.png");
 
 		// Button for delete.
 
 		bDelete = new JButton();
 		bDelete.setBounds(36, 125, 65, 65);
 		description = "Delete a " + options[option] + " of the table";
-		WindowsPreset.buttonPreset(bDelete, description, "src/main/resources/icons/borrar.png", null);
+		WindowsPreset.buttonPreset(bDelete, description, "src/main/resources/icons/borrar.png");
 
 		// Button for update.
 
 		bUpdate = new JButton();
 		bUpdate.setBounds(40, 195, 65, 65);
 		description = "Update a " + options[option] + " of the table";
-		WindowsPreset.buttonPreset(bUpdate, description, "src/main/resources/icons/actualizar.png", null);
+		WindowsPreset.buttonPreset(bUpdate, description, "src/main/resources/icons/actualizar.png");
 
 		// Button for read.
 
 		bDetails = new JButton();
 		bDetails.setBounds(40, 265, 65, 65);
 		description = "Details a " + options[option] + " of the table";
-		WindowsPreset.buttonPreset(bDetails, description, "src/main/resources/icons/lupa.png", null);
+		WindowsPreset.buttonPreset(bDetails, description, "src/main/resources/icons/lupa.png");
 
 		// Button for close the program.
 
 		bLogout = new JButton();
 		bLogout.setBounds(42, 380, 65, 65);
-		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png", null);
+		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
