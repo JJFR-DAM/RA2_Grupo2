@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.RA2_Grupo2.methods.WindowsPreset;
+import com.RA2_Grupo2.objects.Employee;
 
 @SuppressWarnings("serial")
 public class RegisterView extends JFrame {
@@ -94,16 +96,26 @@ public class RegisterView extends JFrame {
 	}
 
 	public class bHandler implements ActionListener {
-		@SuppressWarnings("unused")
+		@SuppressWarnings({ "unused" })
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(bBack)) {
 				dispose();
 				LoginView lv = new LoginView();
+			} else if (e.getSource().equals(bRegister)) {
+				if (tEmail.getText().isBlank() || tName.getText().isBlank() || tNIF.getText().isBlank()
+						|| tSurname.getText().isBlank() || tPass.getPassword().toString().isBlank()
+						|| tPass2.getPassword().toString().isBlank()) {
+					JOptionPane.showMessageDialog(getContentPane(),
+							"You must fill every field to complete the data insertion. Try again.");
+				} else if (tPass.getPassword().equals(tPass2.getPassword())) {
+					Employee em = new Employee(tNIF.getText(), tName.getText(), tSurname.getText(), tEmail.getText(),
+							tPass.getPassword().toString());
+					dispose();
+					LoginView lv = new LoginView();
 
-			} else {
-				dispose();
-				LoginView lv = new LoginView();
+				}
+
 			}
 		}
 

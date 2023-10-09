@@ -54,12 +54,13 @@ public class Employee {
 		this.password = password;
 	}
 
-	public Employee(String NIF, String name, String surname, String email) {
+	public Employee(String NIF, String name, String surname, String email, String password) {
 		super();
 		this.NIF = NIF;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
+		this.password = password;
 	}
 
 	public Employee() {
