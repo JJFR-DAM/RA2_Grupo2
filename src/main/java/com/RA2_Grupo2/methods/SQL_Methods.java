@@ -3,9 +3,14 @@ package com.RA2_Grupo2.methods;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.RA2_Grupo2.objects.Employee;
+import com.RA2_Grupo2.objects.Product;
+import com.RA2_Grupo2.objects.Supplier;
+import com.RA2_Grupo2.objects.Transaction;
 
 public class SQL_Methods {
 
@@ -29,7 +34,102 @@ public class SQL_Methods {
 		System.out.println("Connection failed!");
 		return false;
 	}
-
+	
+	public static int getMaxIdFromTable(String tableName) throws SQLException
+	{
+		PreparedStatement st=connection.prepareStatement(
+				"SELECT MAX(id) from "+tableName);
+		ResultSet rs=st.executeQuery();
+		if(rs.next())
+		{
+			return rs.getInt(1);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	private static ResultSet selectFromTable(String tableName) throws SQLException
+	{
+		PreparedStatement st=connection.prepareStatement(
+				"SELECT * from "+tableName);
+		return st.executeQuery();
+	}
+	
+	public static ArrayList<Employee> getEmployees() throws SQLException
+	{
+		ResultSet rs=selectFromTable("employees");
+		ArrayList<Employee> employees=new ArrayList<>();
+		while(rs.next())
+		{
+			Employee e=new Employee();
+			e.setId(rs.getInt("id"));
+			e.setNIF(rs.getString("nif"));
+			e.setName(rs.getString("name"));
+			e.setSurname(rs.getString("surname"));
+			e.setEmail(rs.getString("email"));
+			e.setPassword(rs.getString("password"));
+			
+			employees.add(e);
+		}
+		return employees;
+	}
+	public static ArrayList<Product> getProducts() throws SQLException
+	{
+		ResultSet rs=selectFromTable("products");
+		ArrayList<Product> products=new ArrayList<>();
+		while(rs.next())
+		{
+			Product p=new Product();
+			p.setId(rs.getInt("id"));
+			p.setQuantity(rs.getInt("quantity"));
+			p.setPrice(rs.getFloat("price"));
+			p.setName(rs.getString("name"));
+			p.setDescription(rs.getString("description"));
+			p.setCategory(rs.getString("category"));
+			p.setImage(rs.getString("image"));
+			p.setDeleted(rs.getInt("deleted"));
+			
+			products.add(p);
+		}
+		return products;
+	}
+	public static ArrayList<Supplier> getSuppliers() throws SQLException
+	{
+		ResultSet rs=selectFromTable("suppliers");
+		ArrayList<Supplier> suppliers=new ArrayList<>();
+		while(rs.next())
+		{
+			Supplier s=new Supplier();
+			s.setId(rs.getInt("id"));
+			s.setName(rs.getString("name"));
+			s.setAddress(rs.getString("address"));
+			s.setPhone(rs.getString("phone"));
+			s.setDeleted(rs.getInt("deleted"));
+			
+			suppliers.add(s);
+		}
+		return suppliers;
+	}
+	public static ArrayList<Transaction> getTransactions() throws SQLException
+	{
+		ResultSet rs=selectFromTable("transactions");
+		ArrayList<Transaction> transactions=new ArrayList<>();
+		while(rs.next())
+		{
+			Transaction t=new Transaction();
+			t.setId(rs.getInt("id"));
+			t.setProductId(rs.getInt("product_id"));
+			t.setSupplierId(rs.getInt("supplier_id"));
+			t.setQuantity(rs.getInt("quantity"));
+			t.setDate(rs.getDate("date"));
+			
+			transactions.add(t);
+		}
+		return transactions;
+	}
+	
 	public static void insertEmployee(Employee e) throws SQLException
 	{
 		PreparedStatement st=connection.prepareStatement(
