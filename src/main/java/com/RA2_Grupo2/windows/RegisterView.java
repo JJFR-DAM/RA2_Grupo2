@@ -133,7 +133,7 @@ public class RegisterView extends JFrame {
 				// If some field is blank.
 
 				if (tEmail.getText().isBlank() || tName.getText().isBlank() || tNIF.getText().isBlank()
-						|| tSurname.getText().isBlank() || tPass.getPassword().toString().isBlank()
+						|| tSurname.getText().isBlank() || tPass.getText().isBlank()
 						|| tPass2.getPassword().toString().isBlank()) {
 					JOptionPane.showMessageDialog(getContentPane(),
 							"You must fill every field to complete the data insertion. Try again.");
@@ -154,7 +154,9 @@ public class RegisterView extends JFrame {
 							// Create employee.
 
 							Employee em = new Employee(tNIF.getText().toUpperCase(), tName.getText(),
-									tSurname.getText(), tEmail.getText(), tPass.getPassword().toString());
+									tSurname.getText(), tEmail.getText(), tPass.getText());
+
+							em.setId(0);
 
 							// Method to insert Employee. Falta poner el id.
 
