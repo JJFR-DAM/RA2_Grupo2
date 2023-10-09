@@ -2,6 +2,9 @@ package com.RA2_Grupo2.windows;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Employee;
 
@@ -96,29 +100,94 @@ public class RegisterView extends JFrame {
 	}
 
 	public class bHandler implements ActionListener {
-		@SuppressWarnings({ "unused" })
+		@SuppressWarnings({ "unused", "deprecation" })
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			// Pattern to verify email.
+
+			String regexEmail = "^(.+)@(.+)$";
+			Pattern patternEmail = Pattern.compile(regexEmail);
+			Matcher matcherEmail = patternEmail.matcher(tEmail.getText());
+			boolean bEmail = matcherEmail.matches();
+
+			// Pattern to verify NIF.
+
+			String regexNIF = "^[0-9]{8}[A-Z a-z]";
+			Pattern patternNIF = Pattern.compile(regexNIF);
+			Matcher matcherNIF = patternNIF.matcher(tNIF.getText());
+			boolean bNIF = matcherNIF.matches();
+
+			// If the button equals Back.
+
 			if (e.getSource().equals(bBack)) {
 				dispose();
 				LoginView lv = new LoginView();
-			} else if (e.getSource().equals(bRegister)) {
+
+			}
+
+			// If the button equals Register.
+
+			else if (e.getSource().equals(bRegister)) {
+
+				// If some field is blank.
+
 				if (tEmail.getText().isBlank() || tName.getText().isBlank() || tNIF.getText().isBlank()
 						|| tSurname.getText().isBlank() || tPass.getPassword().toString().isBlank()
 						|| tPass2.getPassword().toString().isBlank()) {
 					JOptionPane.showMessageDialog(getContentPane(),
 							"You must fill every field to complete the data insertion. Try again.");
-				} else if (tPass.getPassword().equals(tPass2.getPassword())) {
-					Employee em = new Employee(tNIF.getText(), tName.getText(), tSurname.getText(), tEmail.getText(),
-							tPass.getPassword().toString());
-					dispose();
-					LoginView lv = new LoginView();
-
 				}
 
+				// If the email is valid.
+
+				else if (bEmail) {
+
+					// If passwords match.
+
+					if (tPass.getText().equals(tPass2.getText())) {
+
+						// If NIF is valid.
+
+						if (bNIF) {
+
+							// Create employee.
+
+							Employee em = new Employee(tNIF.getText().toUpperCase(), tName.getText(),
+									tSurname.getText(), tEmail.getText(), tPass.getPassword().toString());
+
+							// Method to insert Employee. Falta poner el id.
+
+							try {
+								SQL_Methods.insertEmployee(em);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+
+							dispose();
+							LoginView lv = new LoginView();
+						}
+
+						// If NIF isn't valid.
+
+						else {
+							JOptionPane.showMessageDialog(getContentPane(), "The NIF isn't valid. Try again.");
+						}
+					}
+
+					// If passwords don't match.
+
+					else {
+						JOptionPane.showMessageDialog(getContentPane(), "The passwords don't match. Try again.");
+					}
+				}
+
+				// If the email isn't valid.
+
+				else if (!bEmail) {
+					JOptionPane.showMessageDialog(getContentPane(), "The email isn't valid. Try again.");
+				}
 			}
 		}
-
 	}
-
 }

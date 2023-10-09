@@ -67,4 +67,10 @@ public class Employee {
 		super();
 	}
 
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", NIF=" + NIF + ", name=" + name + ", surname=" + surname + ", email=" + email
+				+ ", password=" + password + "]";
+	}
+
 }

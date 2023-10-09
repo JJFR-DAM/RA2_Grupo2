@@ -3,7 +3,7 @@ package com.RA2_Grupo2.objects;
 public class Supplier {
 
 	private String name, address, phone;
-	private int id;
+	private int id, deleted;
 
 	public int getId() {
 		return id;
@@ -37,11 +37,20 @@ public class Supplier {
 		this.phone = phone;
 	}
 
+	public int getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(int deleted) {
+		this.deleted = deleted;
+	}
+
 	public Supplier(String name, String address, String phone) {
 		super();
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
+		this.deleted = 0;
 	}
 
 	public Supplier() {

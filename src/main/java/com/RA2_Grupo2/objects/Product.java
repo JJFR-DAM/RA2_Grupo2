@@ -4,7 +4,7 @@ public class Product {
 
 	private String name, description, category, image;
 	private float price;
-	private int quantity, id;
+	private int quantity, id, deleted;
 
 	public int getId() {
 		return id;
@@ -62,6 +62,14 @@ public class Product {
 		this.image = image;
 	}
 
+	public int getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(int deleted) {
+		this.deleted = deleted;
+	}
+
 	public Product(String name, String description, float price, int quantity, String category, String image) {
 		super();
 		this.name = name;
@@ -70,6 +78,7 @@ public class Product {
 		this.quantity = quantity;
 		this.category = category;
 		this.image = image;
+		this.deleted = 0;
 	}
 
 	public Product() {
