@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -162,11 +163,11 @@ public class MainView extends JFrame {
 		getContentPane().add(jcb3);
 
 		currentUser = new JLabel("User: " + LoginView.currentUser);
-		currentUser.setBounds(10, 55, 200, 25);
+		currentUser.setBounds(138, 55, 200, 25);
 		getContentPane().add(currentUser);
 
 		currentTable = new JLabel("THE TABLE IS SHOWING: ");
-		currentTable.setBounds(208, 10, 130, 25);
+		currentTable.setBounds(181, 10, 157, 25);
 		getContentPane().add(currentTable);
 
 		setVisible(true);
@@ -210,7 +211,9 @@ public class MainView extends JFrame {
 			Iterator<Product> iter = listP.iterator();
 			while (iter.hasNext()) {
 				Product p = iter.next();
-				dtm.addRow(new Object[] { p.getId(), p.getCategory(), p.getName(), p.getPrice() });
+				if (p.getDeleted() == 0) {
+					dtm.addRow(new Object[] { p.getId(), p.getCategory(), p.getName(), p.getPrice() });
+				}
 			}
 			MainView.table.setModel(dtm);
 		} else {
@@ -224,7 +227,9 @@ public class MainView extends JFrame {
 			Iterator<Supplier> iter = listS.iterator();
 			while (iter.hasNext()) {
 				Supplier s = iter.next();
-				dtm.addRow(new Object[] { s.getId(), s.getName(), s.getPhone() });
+				if (s.getDeleted() == 0) {
+					dtm.addRow(new Object[] { s.getId(), s.getName(), s.getPhone() });
+				}
 			}
 			MainView.table.setModel(dtm);
 
@@ -247,14 +252,32 @@ public class MainView extends JFrame {
 				if (option == 0) {
 
 				} else {
+					int option = table.getSelectedRow();
+					if (option >= 0) {
+						int resp = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
+								JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+						if (resp == 0) {
+							Supplier s = listS.get(option);
+							try {
+								SQL_Methods.deleteSupplier(s);
+								MainView.refreshTable();
+							} catch (SQLException e1) {
+								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
+										JOptionPane.WARNING_MESSAGE);
+							}
+						}
 
+					} else {
+						JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
+								JOptionPane.WARNING_MESSAGE);
+					}
 				}
 
 			} else if (e.getSource().equals(bUpdate)) {
 				if (option == 0) {
 					UpdateProductView upv = new UpdateProductView();
 				} else {
-					UpdateSupplierView usv = new UpdateSupplierView();
+					UpdateSupplierView usv = new UpdateSupplierView(listS.get(MainView.table.getSelectedRow()));
 				}
 
 			} else if (e.getSource().equals(bDetails)) {

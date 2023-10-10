@@ -109,12 +109,14 @@ public class InsertSupplierView extends JFrame {
 					int id = 0;
 					try {
 						id = SQL_Methods.getMaxIdFromTable("suppliers");
+						Supplier s = new Supplier(jtName.getText(), jtAddress.getText(), jtPhone.getText());
+						s.setId(id + 1);
+						SQL_Methods.insertSupplier(s);
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
-					Supplier s = new Supplier(jtName.getText(), jtAddress.getText(), jtPhone.getText());
-					s.setId(id);
-					// SQL_Methods.insertSupplier(s);
+					MainView.refreshTable();
+					dispose();
 				}
 			} else if (e.getSource().equals(jbcancel)) {
 				dispose();

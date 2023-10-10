@@ -161,7 +161,7 @@ public class RegisterView extends JFrame {
 							} catch (SQLException e1) {
 								e1.printStackTrace();
 							}
-							em.setId(++id);
+							em.setId(id + 1);
 
 							// Method to insert Employee. Falta poner el id.
 
