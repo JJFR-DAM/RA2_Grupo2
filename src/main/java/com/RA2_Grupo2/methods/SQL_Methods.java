@@ -25,7 +25,6 @@ public class SQL_Methods {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection(host, user, pass);
 			
-			System.out.println("Connection success!");
 			return true;
 		}
 		catch (SQLException ex){}
@@ -141,6 +140,51 @@ public class SQL_Methods {
 		st.setString(4,e.getSurname());
 		st.setString(5,e.getEmail());
 		st.setString(6,e.getPassword());
+		
+		st.executeUpdate();
+		st.close();
+	}
+	public static void insertProduct(Product p) throws SQLException
+	{
+		PreparedStatement st=connection.prepareStatement(
+					"INSERT INTO products VALUES (?,?,?,?,?,?,?,?)");
+		
+		st.setInt(1,p.getId());
+		st.setInt(2,p.getQuantity());
+		st.setFloat(3,p.getPrice());
+		st.setString(4,p.getName());
+		st.setString(5,p.getDescription());
+		st.setString(6,p.getCategory());
+		st.setString(7,p.getImage());
+		st.setInt(8,p.getDeleted());
+		
+		st.executeUpdate();
+		st.close();
+	}
+	public static void insertSupplier(Supplier s) throws SQLException
+	{
+		PreparedStatement st=connection.prepareStatement(
+					"INSERT INTO suppliers VALUES (?,?,?,?,?)");
+		
+		st.setInt(1,s.getId());
+		st.setString(2,s.getName());
+		st.setString(3,s.getAddress());
+		st.setString(4,s.getPhone());
+		st.setInt(5,s.getDeleted());
+		
+		st.executeUpdate();
+		st.close();
+	}
+	public static void insertTransaction(Transaction t) throws SQLException
+	{
+		PreparedStatement st=connection.prepareStatement(
+					"INSERT INTO transactions VALUES (?,?,?,?,?)");
+		
+		st.setInt(1,t.getId());
+		st.setInt(2,t.getProductId());
+		st.setInt(3,t.getSupplierId());
+		st.setInt(4,t.getQuantity());
+		st.setDate(5,t.getDate());
 		
 		st.executeUpdate();
 		st.close();
