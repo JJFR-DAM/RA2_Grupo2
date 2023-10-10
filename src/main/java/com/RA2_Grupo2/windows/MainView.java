@@ -22,7 +22,6 @@ import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Product;
 import com.RA2_Grupo2.objects.Supplier;
-import com.RA2_Grupo2.objects.Transaction;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
@@ -31,8 +30,8 @@ public class MainView extends JFrame {
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
-	private JLabel currentUser;
-	private JButton bInsert, bDelete, bUpdate, bDetails, bLogout;
+	private JLabel currentUser, currentTable;
+	private JButton bInsert, bDelete, bUpdate, bDetails, bInventory, bLogout;
 	private JScrollBar scrollBar;
 	private JComboBox<String> jcb1, jcb2, jcb3;
 
@@ -42,7 +41,6 @@ public class MainView extends JFrame {
 	private static String[] filter2 = { "Name", "Phone" };
 	private static List<Product> listP = new ArrayList<>();
 	private static List<Supplier> listS = new ArrayList<>();
-	private static List<Transaction> listT = new ArrayList<>();
 
 	// Constructor.
 
@@ -92,10 +90,15 @@ public class MainView extends JFrame {
 
 		bHandler handler = new bHandler();
 
+		bInventory = new JButton();
+		bInventory.setBounds(32, 341, 65, 65);
+		WindowsPreset.buttonPreset(bInventory, "Open inventory view.", "src/main/resources/icons/transaccion.png");
+		bInventory.addActionListener(handler);
+
 		// Button for create.
 
 		bInsert = new JButton();
-		bInsert.setBounds(32, 100, 65, 65);
+		bInsert.setBounds(32, 41, 65, 65);
 		String description = "Insert a " + options[option] + " in the table";
 		WindowsPreset.buttonPreset(bInsert, description, "src/main/resources/icons/insertar.png");
 		bInsert.addActionListener(handler);
@@ -103,7 +106,7 @@ public class MainView extends JFrame {
 		// Button for delete.
 
 		bDelete = new JButton();
-		bDelete.setBounds(32, 175, 65, 65);
+		bDelete.setBounds(32, 116, 65, 65);
 		description = "Delete a " + options[option] + " of the table";
 		WindowsPreset.buttonPreset(bDelete, description, "src/main/resources/icons/borrar.png");
 		bDelete.addActionListener(handler);
@@ -111,7 +114,7 @@ public class MainView extends JFrame {
 		// Button for update.
 
 		bUpdate = new JButton();
-		bUpdate.setBounds(32, 250, 65, 65);
+		bUpdate.setBounds(32, 191, 65, 65);
 		description = "Update a " + options[option] + " of the table";
 		WindowsPreset.buttonPreset(bUpdate, description, "src/main/resources/icons/actualizar.png");
 		bUpdate.addActionListener(handler);
@@ -119,7 +122,7 @@ public class MainView extends JFrame {
 		// Button for read.
 
 		bDetails = new JButton();
-		bDetails.setBounds(32, 325, 65, 65);
+		bDetails.setBounds(32, 266, 65, 65);
 		description = "Details a " + options[option] + " of the table";
 		WindowsPreset.buttonPreset(bDetails, description, "src/main/resources/icons/lupa.png");
 		bDetails.addActionListener(handler);
@@ -127,12 +130,13 @@ public class MainView extends JFrame {
 		// Button for close the program.
 
 		bLogout = new JButton();
-		bLogout.setBounds(32, 478, 65, 65);
+		bLogout.setBounds(32, 457, 65, 65);
 		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
 		bLogout.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
+		pbutton.add(bInventory);
 		pbutton.add(bInsert);
 		pbutton.add(bDelete);
 		pbutton.add(bUpdate);
@@ -142,24 +146,28 @@ public class MainView extends JFrame {
 		getContentPane().add(pbutton);
 
 		jcb1 = new JComboBox<String>(options);
-		jcb1.setBounds(230, 38, 130, 25);
+		jcb1.setBounds(348, 10, 130, 25);
 		jcb1.addActionListener(handler);
 		getContentPane().add(jcb1);
 
 		jcb2 = new JComboBox<String>(filter1);
-		jcb2.setBounds(370, 38, 200, 25);
+		jcb2.setBounds(348, 55, 200, 25);
 		jcb2.addActionListener(handler);
 		getContentPane().add(jcb2);
 
 		jcb3 = new JComboBox<String>(filter2);
-		jcb3.setBounds(370, 38, 200, 25);
+		jcb3.setBounds(348, 55, 200, 25);
 		jcb3.addActionListener(handler);
 		jcb3.setVisible(false);
 		getContentPane().add(jcb3);
 
 		currentUser = new JLabel("User: " + LoginView.currentUser);
-		currentUser.setBounds(20, 38, 200, 25);
+		currentUser.setBounds(10, 55, 200, 25);
 		getContentPane().add(currentUser);
+
+		currentTable = new JLabel("THE TABLE IS SHOWING: ");
+		currentTable.setBounds(208, 10, 130, 25);
+		getContentPane().add(currentTable);
 
 		setVisible(true);
 	}
@@ -182,14 +190,6 @@ public class MainView extends JFrame {
 		MainView.listS = listS;
 	}
 
-	public static List<Transaction> getListT() {
-		return listT;
-	}
-
-	public static void setListT(List<Transaction> listT) {
-		MainView.listT = listT;
-	}
-
 	public static void refreshTable() {
 		DefaultTableModel dtm = new DefaultTableModel() {
 
@@ -200,7 +200,7 @@ public class MainView extends JFrame {
 
 		};
 		if (option == 0) {
-			String[] columns = { "CAT", "NAME", "PRICE" };
+			String[] columns = { "ID", "CAT", "NAME", "PRICE" };
 			dtm.setColumnIdentifiers(columns);
 			try {
 				listP = SQL_Methods.getProducts();
@@ -210,11 +210,11 @@ public class MainView extends JFrame {
 			Iterator<Product> iter = listP.iterator();
 			while (iter.hasNext()) {
 				Product p = iter.next();
-				dtm.addRow(new Object[] { p.getCategory(), p.getName(), p.getPrice() });
+				dtm.addRow(new Object[] { p.getId(), p.getCategory(), p.getName(), p.getPrice() });
 			}
 			MainView.table.setModel(dtm);
 		} else {
-			String[] columns = { "NAME", "PHONE" };
+			String[] columns = { "ID", "NAME", "PHONE" };
 			dtm.setColumnIdentifiers(columns);
 			try {
 				listS = SQL_Methods.getSuppliers();
@@ -224,7 +224,7 @@ public class MainView extends JFrame {
 			Iterator<Supplier> iter = listS.iterator();
 			while (iter.hasNext()) {
 				Supplier s = iter.next();
-				dtm.addRow(new Object[] { s.getName(), s.getPhone() });
+				dtm.addRow(new Object[] { s.getId(), s.getName(), s.getPhone() });
 			}
 			MainView.table.setModel(dtm);
 
@@ -284,6 +284,9 @@ public class MainView extends JFrame {
 
 			} else if (e.getSource().equals(jcb3)) {
 
+			} else if (e.getSource().equals(bInventory)) {
+				dispose();
+				InventoryView iv = new InventoryView();
 			}
 		}
 

@@ -155,8 +155,13 @@ public class RegisterView extends JFrame {
 
 							Employee em = new Employee(tNIF.getText().toUpperCase(), tName.getText(),
 									tSurname.getText(), tEmail.getText(), tPass.getText());
-
-							em.setId(0);
+							int id = 0;
+							try {
+								id = SQL_Methods.getMaxIdFromTable("employees");
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+							em.setId(++id);
 
 							// Method to insert Employee. Falta poner el id.
 
