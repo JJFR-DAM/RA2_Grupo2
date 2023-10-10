@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -22,7 +24,9 @@ public class InsertSupplierView extends JFrame {
 	// Attributes declaration.
 
 	private JLabel jlName, jlAddress, jlPhone;
-	private JTextField jtName, jtAddress, jtPhone;
+	private JTextField jtName, jtPhone;
+	private JTextArea jtAddress;
+	private JScrollPane jsAddress;
 	private JButton jbconfirm, jbcancel;
 
 	// Constructor.
@@ -32,7 +36,7 @@ public class InsertSupplierView extends JFrame {
 		// Windows Properties.
 
 		super("Insert");
-		setSize(400, 330);
+		setSize(400, 365);
 		WindowsPreset.windowPreset(this);
 		getContentPane().setLayout(null);
 
@@ -49,27 +53,29 @@ public class InsertSupplierView extends JFrame {
 		jtName.setToolTipText("Insert name");
 		getContentPane().add(jtName);
 
-		jlAddress = new JLabel("Address:");
-		jlAddress.setBounds(10, 85, 175, 35);
-		jlAddress.setHorizontalAlignment(SwingConstants.CENTER);
-		jlAddress.setBackground(Color.GRAY);
-		getContentPane().add(jlAddress);
-		jtAddress = new JTextField();
-		jtAddress.setBounds(185, 85, 193, 35);
-		jtAddress.setColumns(10);
-		jtAddress.setToolTipText("Insert address");
-		getContentPane().add(jtAddress);
-
 		jlPhone = new JLabel("Phone:");
-		jlPhone.setBounds(10, 130, 175, 35);
+		jlPhone.setBounds(10, 85, 175, 35);
 		jlPhone.setHorizontalAlignment(SwingConstants.CENTER);
 		jlPhone.setBackground(Color.GRAY);
 		getContentPane().add(jlPhone);
 		jtPhone = new JTextField();
-		jtPhone.setBounds(185, 130, 193, 35);
+		jtPhone.setBounds(185, 85, 193, 35);
 		jtPhone.setColumns(10);
 		jtPhone.setToolTipText("Insert phone");
 		getContentPane().add(jtPhone);
+
+		jlAddress = new JLabel("Address:");
+		jlAddress.setBounds(10, 147, 175, 35);
+		jlAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		jlAddress.setBackground(Color.GRAY);
+		getContentPane().add(jlAddress);
+		jtAddress = new JTextArea();
+		jtAddress.setColumns(10);
+		jtAddress.setToolTipText("Insert address");
+		jsAddress = new JScrollPane(jtAddress);
+		jsAddress.setBounds(185, 130, 193, 70);
+		;
+		getContentPane().add(jsAddress);
 
 		// Button's configurations.
 
@@ -78,7 +84,7 @@ public class InsertSupplierView extends JFrame {
 		// Button to confirm the insertion.
 
 		jbconfirm = new JButton();
-		jbconfirm.setBounds(235, 195, 65, 65);
+		jbconfirm.setBounds(235, 230, 65, 65);
 		WindowsPreset.buttonPreset(jbconfirm, "Insert the supplier", "src/main/resources/icons/confirmar.png");
 		jbconfirm.setBackground(new Color(89, 166, 89));
 		jbconfirm.addActionListener(handler);
@@ -87,7 +93,7 @@ public class InsertSupplierView extends JFrame {
 		// Button to cancel the insertion.
 
 		jbcancel = new JButton();
-		jbcancel.setBounds(100, 195, 65, 65);
+		jbcancel.setBounds(100, 230, 65, 65);
 		WindowsPreset.buttonPreset(jbcancel, "Cancel", "src/main/resources/icons/volver.png");
 		jbcancel.setBackground(new Color(166, 89, 89));
 		jbcancel.addActionListener(handler);
@@ -105,7 +111,6 @@ public class InsertSupplierView extends JFrame {
 					JOptionPane.showMessageDialog(getContentPane(),
 							"You must fill every field to complete the data insertion. Try again.");
 				} else {
-					// Inserción de datos.
 					int id = 0;
 					try {
 						id = SQL_Methods.getMaxIdFromTable("suppliers");
