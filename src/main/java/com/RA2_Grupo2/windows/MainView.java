@@ -287,7 +287,7 @@ public class MainView extends JFrame {
 
 			} else if (e.getSource().equals(bUpdate)) {
 				if (option == 0) {
-					UpdateProductView upv = new UpdateProductView();
+					UpdateProductView upv = new UpdateProductView(listP.get(MainView.table.getSelectedRow()));
 				} else {
 					UpdateSupplierView usv = new UpdateSupplierView(listS.get(MainView.table.getSelectedRow()));
 				}
