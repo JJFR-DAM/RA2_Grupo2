@@ -2,12 +2,16 @@ package com.RA2_Grupo2.windows;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+
+import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Product;
 import javax.swing.JLabel;
@@ -15,7 +19,9 @@ import javax.swing.JLabel;
 @SuppressWarnings("serial")
 public class UpdateProductView extends JFrame{
 
-	private JTextField name, description, image, price, quantity;
+	private JTextField name, description, image, price;
+	private JComboBox category;
+	private JSpinner quantity;
 	private JButton updateButton;
 	private JButton backButton;
 	private JLabel lblNewLabel;
@@ -26,8 +32,7 @@ public class UpdateProductView extends JFrame{
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
 	
-	public UpdateProductView() {
-		Product p = new Product();
+	public UpdateProductView(Product p) {
 		setTitle("EDITAR PRODUCTO");
 		setSize(519, 340);
 		WindowsPreset.windowPreset(this);
@@ -47,7 +52,6 @@ public class UpdateProductView extends JFrame{
 		description.setText(p.getDescription());
 		getContentPane().add(description);
 		
-		JComboBox category = new JComboBox();
 		category.setBounds(33, 150, 163, 38);
 		getContentPane().add(category);
 		
@@ -65,7 +69,6 @@ public class UpdateProductView extends JFrame{
 		price.setText(Float.toString(p.getPrice()));
 		getContentPane().add(price);
 		
-		JSpinner quantity = new JSpinner();
 		quantity.setBounds(229, 234, 52, 36);
 		getContentPane().add(quantity);
 		
@@ -76,8 +79,8 @@ public class UpdateProductView extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				p.setName(name.toString());
 				p.setDescription(description.toString());
-				p.setImage(image.toString());
-				p.setCategory(category.toString());
+				p.setImage("test");
+				p.setCategory("test");
 				p.setPrice(Float.parseFloat(price.toString()));
 				p.setQuantity(Integer.parseInt(quantity.toString()));
 				updateProduct(p);
@@ -130,14 +133,17 @@ public class UpdateProductView extends JFrame{
 	
 	public void updateProduct(Product p) {
 		
-		if(p.getName().equals("") || p.getDescription().equals("") || p.getCategory().equals("") || p.getImage().equals("") || price.equals("") || quantity.equals("")) {
+		if(p.getName().equals("") || p.getDescription().equals("") || p.getCategory().equals("") || p.getImage().equals("")) {
         	JOptionPane.showMessageDialog(null, "Para editar un producto de la base de datos debe rellenar todos los datos", "", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			int res = JOptionPane.showConfirmDialog(null, "¿Está seguro de querer editar el producto?", "EDITAR PRODUCTO", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	    	if(res == 0) {
-	    		
-	    		//Conexion base de datos
-	    		
+	    		try {
+					SQL_Methods.updateProduct(p);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	    	} else JOptionPane.showMessageDialog(null, "Se ha cancelado la operación para editar producto.", "EDITAR PRODUCTO CANCELADO", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
