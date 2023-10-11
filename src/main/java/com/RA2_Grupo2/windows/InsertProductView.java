@@ -2,6 +2,7 @@ package com.RA2_Grupo2.windows;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.Locale.Category;
 
 import javax.swing.*;
@@ -121,8 +122,13 @@ public class InsertProductView extends JFrame {
 	    	int res = JOptionPane.showConfirmDialog(null, "¿Está seguro de querer añadir el producto a la base de datos?", "AÑADIR PRODUCTO", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	    	if(res == 0) {
 	    		Product newP = new Product(name.getText(), description.getText(), Float.parseFloat(price.getText()), Integer.parseInt(quantity.getValue().toString()), category.getSelectedItem().toString(), "test");
-	    		newP.setId(SQL_Methods.getMaxIdFromTable("products"));
-				SQL_Methods.insertProduct(newP);
+	    		try {
+					newP.setId(SQL_Methods.getMaxIdFromTable("products"));
+					SQL_Methods.insertProduct(newP);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	    	} else JOptionPane.showMessageDialog(null, "Se ha cancelado la operación para añadir producto.", "AÑADIR PRODUCTO CANCELADO", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

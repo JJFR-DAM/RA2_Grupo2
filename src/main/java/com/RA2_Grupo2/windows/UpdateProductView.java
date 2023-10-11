@@ -2,6 +2,8 @@ package com.RA2_Grupo2.windows;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -136,7 +138,12 @@ public class UpdateProductView extends JFrame{
 		} else {
 			int res = JOptionPane.showConfirmDialog(null, "¿Está seguro de querer editar el producto?", "EDITAR PRODUCTO", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	    	if(res == 0) {
-	    		SQL_Methods.updateProduct(p);
+	    		try {
+					SQL_Methods.updateProduct(p);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	    	} else JOptionPane.showMessageDialog(null, "Se ha cancelado la operación para editar producto.", "EDITAR PRODUCTO CANCELADO", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
