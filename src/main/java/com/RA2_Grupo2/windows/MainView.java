@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -99,32 +100,28 @@ public class MainView extends JFrame {
 
 		bInsert = new JButton();
 		bInsert.setBounds(32, 41, 65, 65);
-		String description = "Insert a " + options[option] + " in the table";
-		WindowsPreset.buttonPreset(bInsert, description, "src/main/resources/icons/insertar.png");
+		WindowsPreset.buttonPreset(bInsert, "Insert a product in the table", "src/main/resources/icons/insertar.png");
 		bInsert.addActionListener(handler);
 
 		// Button for delete.
 
 		bDelete = new JButton();
 		bDelete.setBounds(32, 116, 65, 65);
-		description = "Delete a " + options[option] + " of the table";
-		WindowsPreset.buttonPreset(bDelete, description, "src/main/resources/icons/borrar.png");
+		WindowsPreset.buttonPreset(bDelete, "Delete a product of the table", "src/main/resources/icons/borrar.png");
 		bDelete.addActionListener(handler);
 
 		// Button for update.
 
 		bUpdate = new JButton();
 		bUpdate.setBounds(32, 191, 65, 65);
-		description = "Update a " + options[option] + " of the table";
-		WindowsPreset.buttonPreset(bUpdate, description, "src/main/resources/icons/actualizar.png");
+		WindowsPreset.buttonPreset(bUpdate, "Update a product of the table", "src/main/resources/icons/actualizar.png");
 		bUpdate.addActionListener(handler);
 
 		// Button for read.
 
 		bDetails = new JButton();
 		bDetails.setBounds(32, 266, 65, 65);
-		description = "Details a " + options[option] + " of the table";
-		WindowsPreset.buttonPreset(bDetails, description, "src/main/resources/icons/lupa.png");
+		WindowsPreset.buttonPreset(bDetails, "Details a product of the table", "src/main/resources/icons/lupa.png");
 		bDetails.addActionListener(handler);
 
 		// Button for close the program.
@@ -162,11 +159,11 @@ public class MainView extends JFrame {
 		getContentPane().add(jcb3);
 
 		currentUser = new JLabel("User: " + LoginView.currentUser);
-		currentUser.setBounds(10, 55, 200, 25);
+		currentUser.setBounds(138, 55, 200, 25);
 		getContentPane().add(currentUser);
 
 		currentTable = new JLabel("THE TABLE IS SHOWING: ");
-		currentTable.setBounds(208, 10, 130, 25);
+		currentTable.setBounds(181, 10, 157, 25);
 		getContentPane().add(currentTable);
 
 		setVisible(true);
@@ -210,7 +207,9 @@ public class MainView extends JFrame {
 			Iterator<Product> iter = listP.iterator();
 			while (iter.hasNext()) {
 				Product p = iter.next();
-				dtm.addRow(new Object[] { p.getId(), p.getCategory(), p.getName(), p.getPrice() });
+				if (p.getDeleted() == 0) {
+					dtm.addRow(new Object[] { p.getId(), p.getCategory(), p.getName(), p.getPrice() });
+				}
 			}
 			MainView.table.setModel(dtm);
 		} else {
@@ -224,7 +223,9 @@ public class MainView extends JFrame {
 			Iterator<Supplier> iter = listS.iterator();
 			while (iter.hasNext()) {
 				Supplier s = iter.next();
-				dtm.addRow(new Object[] { s.getId(), s.getName(), s.getPhone() });
+				if (s.getDeleted() == 0) {
+					dtm.addRow(new Object[] { s.getId(), s.getName(), s.getPhone() });
+				}
 			}
 			MainView.table.setModel(dtm);
 
@@ -245,16 +246,50 @@ public class MainView extends JFrame {
 
 			} else if (e.getSource().equals(bDelete)) {
 				if (option == 0) {
-
+					int option = table.getSelectedRow();
+					if (option >= 0) {
+						int resp = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
+								JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+						if (resp == 0) {
+							Product p = listP.get(option);
+							try {
+								SQL_Methods.deleteProduct(p);
+								MainView.refreshTable();
+							} catch (SQLException e1) {
+								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
+										JOptionPane.WARNING_MESSAGE);
+							}
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
+								JOptionPane.WARNING_MESSAGE);
+					}
 				} else {
-
+					int option = table.getSelectedRow();
+					if (option >= 0) {
+						int resp = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
+								JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+						if (resp == 0) {
+							Supplier s = listS.get(option);
+							try {
+								SQL_Methods.deleteSupplier(s);
+								MainView.refreshTable();
+							} catch (SQLException e1) {
+								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
+										JOptionPane.WARNING_MESSAGE);
+							}
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
+								JOptionPane.WARNING_MESSAGE);
+					}
 				}
 
 			} else if (e.getSource().equals(bUpdate)) {
 				if (option == 0) {
 					UpdateProductView upv = new UpdateProductView();
 				} else {
-					UpdateSupplierView usv = new UpdateSupplierView();
+					UpdateSupplierView usv = new UpdateSupplierView(listS.get(MainView.table.getSelectedRow()));
 				}
 
 			} else if (e.getSource().equals(bDetails)) {
@@ -270,11 +305,19 @@ public class MainView extends JFrame {
 			} else if (e.getSource().equals(jcb1)) {
 				if (jcb1.getSelectedIndex() == 0) {
 					option = 0;
+					bInsert.setToolTipText("Insert a product in the table");
+					bDelete.setToolTipText("Delete a product of the table");
+					bUpdate.setToolTipText("Update a product of the table");
+					bDetails.setToolTipText("Details a product of the table");
 					refreshTable();
 					jcb2.setVisible(true);
 					jcb3.setVisible(false);
 				} else {
 					option = 1;
+					bInsert.setToolTipText("Insert a supplier in the table");
+					bDelete.setToolTipText("Delete a supplier of the table");
+					bUpdate.setToolTipText("Update a supplier of the table");
+					bDetails.setToolTipText("Details a supplier of the table");
 					refreshTable();
 					jcb3.setVisible(true);
 					jcb2.setVisible(false);

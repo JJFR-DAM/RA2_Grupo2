@@ -1,6 +1,6 @@
 package com.RA2_Grupo2.objects;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Transaction {
 
