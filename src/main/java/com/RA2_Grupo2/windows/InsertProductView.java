@@ -2,13 +2,20 @@ package com.RA2_Grupo2.windows;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Locale.Category;
+
 import javax.swing.*;
+
+import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
+import com.RA2_Grupo2.objects.Product;
 
 @SuppressWarnings("serial")
 public class InsertProductView extends JFrame {
 
 	private JTextField name, description, image, price;
+	private JSpinner quantity;
+	private JComboBox category;
 	private JButton insertButton;
 	private JButton backButton;
 	private JLabel lblNewLabel;
@@ -70,7 +77,6 @@ public class InsertProductView extends JFrame {
 		backButton.setBounds(410, 10, 85, 21);
 		getContentPane().add(backButton);
 		
-		JComboBox category = new JComboBox();
 		category.setBounds(33, 150, 163, 38);
 		getContentPane().add(category);
 		
@@ -86,7 +92,6 @@ public class InsertProductView extends JFrame {
 		lblNewLabel_2.setBounds(229, 137, 141, 13);
 		getContentPane().add(lblNewLabel_2);
 		
-		JSpinner quantity = new JSpinner();
 		quantity.setBounds(229, 234, 52, 36);
 		getContentPane().add(quantity);
 		
@@ -110,16 +115,15 @@ public class InsertProductView extends JFrame {
 	}
 	
 	public void insertProduct() {
-		if(name.equals("") || description.equals("") || image.equals("") || price.equals("") || quantity.equals("")) {
+		if(name.equals("") || description.equals("") || image.equals("") || price.equals("")) {
         	JOptionPane.showMessageDialog(null, "Para introducir un producto a la base de datos debe rellenar todos los datos", "", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 	    	int res = JOptionPane.showConfirmDialog(null, "¿Está seguro de querer añadir el producto a la base de datos?", "AÑADIR PRODUCTO", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	    	if(res == 0) {
-	    		
-	    		//Conexion base de datos
-	    		
+	    		Product newP = new Product(name.getText(), description.getText(), Float.parseFloat(price.getText()), Integer.parseInt(quantity.getValue().toString()), category.getSelectedItem().toString(), "test");
+	    		newP.setId(SQL_Methods.getMaxIdFromTable("products"));
+				SQL_Methods.insertProduct(newP);
 	    	} else JOptionPane.showMessageDialog(null, "Se ha cancelado la operación para añadir producto.", "AÑADIR PRODUCTO CANCELADO", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
-
