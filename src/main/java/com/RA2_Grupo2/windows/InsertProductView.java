@@ -14,15 +14,15 @@ import com.RA2_Grupo2.objects.Product;
 @SuppressWarnings("serial")
 public class InsertProductView extends JFrame {
 
-	private JTextField name, description, image, price;
-	private JSpinner quantity;
-	private JComboBox category;
+	private JTextField name, description, image, quantity;
 	private JButton insertButton;
 	private JButton backButton;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_5;
+	private JTextField category;
+	private JTextField price;
 	
 	public InsertProductView() {
 		setTitle("INSERTAR PRODUCTO");
@@ -50,13 +50,6 @@ public class InsertProductView extends JFrame {
 		image.setColumns(10);
 		getContentPane().add(image);
 		
-		price = new JTextField();
-		price.setToolTipText("PRECIO");
-		price.setEditable(true);
-		price.setBounds(33, 234, 163, 36);
-		price.setColumns(10);
-		getContentPane().add(price);
-		
 		insertButton = new JButton("INSERTAR PRODUCTO");
 		insertButton.setBounds(301, 227, 169, 48);
 		insertButton.addMouseListener(new MouseAdapter() {
@@ -78,9 +71,6 @@ public class InsertProductView extends JFrame {
 		backButton.setBounds(410, 10, 85, 21);
 		getContentPane().add(backButton);
 		
-		category.setBounds(33, 150, 163, 38);
-		getContentPane().add(category);
-		
 		lblNewLabel = new JLabel("NOMBRE");
 		lblNewLabel.setBounds(33, 43, 94, 13);
 		getContentPane().add(lblNewLabel);
@@ -92,9 +82,6 @@ public class InsertProductView extends JFrame {
 		lblNewLabel_2 = new JLabel("IMAGEN");
 		lblNewLabel_2.setBounds(229, 137, 141, 13);
 		getContentPane().add(lblNewLabel_2);
-		
-		quantity.setBounds(229, 234, 52, 36);
-		getContentPane().add(quantity);
 		
 		JButton selectImageButton = new JButton("...");
 		selectImageButton.setBounds(402, 159, 43, 21);
@@ -112,19 +99,36 @@ public class InsertProductView extends JFrame {
 		lblNewLabel_5.setBounds(229, 221, 67, 13);
 		getContentPane().add(lblNewLabel_5);
 		
+		quantity = new JTextField();
+		quantity.setBounds(229, 234, 62, 36);
+		getContentPane().add(quantity);
+		quantity.setColumns(10);
+		
+		category = new JTextField();
+		category.setBounds(31, 152, 165, 36);
+		getContentPane().add(category);
+		category.setColumns(10);
+		
+		price = new JTextField();
+		price.setBounds(33, 235, 165, 33);
+		getContentPane().add(price);
+		price.setColumns(10);
+		
 		setVisible(true);
 	}
 	
 	public void insertProduct() {
-		if(name.equals("") || description.equals("") || image.equals("") || price.equals("")) {
+		if(name.getText().isBlank() || description.getText().isBlank() || category.getText().isBlank() || price.equals("")) {
         	JOptionPane.showMessageDialog(null, "Para introducir un producto a la base de datos debe rellenar todos los datos", "", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 	    	int res = JOptionPane.showConfirmDialog(null, "¿Está seguro de querer añadir el producto a la base de datos?", "AÑADIR PRODUCTO", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	    	if(res == 0) {
-	    		Product newP = new Product(name.getText(), description.getText(), Float.parseFloat(price.getText()), Integer.parseInt(quantity.getValue().toString()), category.getSelectedItem().toString(), "test");
+	    		Product newP = new Product(name.getText(), description.getText(), Float.parseFloat(price.getText()), Integer.parseInt(quantity.getText()), category.getText(), "test");
 	    		try {
-					newP.setId(SQL_Methods.getMaxIdFromTable("products"));
+					newP.setId(SQL_Methods.getMaxIdFromTable("products") + 1);
 					SQL_Methods.insertProduct(newP);
+					JOptionPane.showMessageDialog(null, "Producto añadido correctamente.", "PRODUCTO AÑADIDO", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
