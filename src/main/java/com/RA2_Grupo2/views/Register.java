@@ -1,4 +1,4 @@
-package com.RA2_Grupo2.windows;
+package com.RA2_Grupo2.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,14 +18,14 @@ import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Employee;
 
 @SuppressWarnings("serial")
-public class RegisterView extends JFrame {
+public class Register extends JFrame {
 
 	private JLabel lPass, lPass2, lName, lSurname, lNIF, lEmail;
 	private JTextField tName, tSurname, tNIF, tEmail;
 	private JPasswordField tPass, tPass2;
 	private JButton bBack, bRegister;
 
-	public RegisterView() {
+	public Register() {
 
 		super("Sign up");
 
@@ -122,7 +122,7 @@ public class RegisterView extends JFrame {
 
 			if (e.getSource().equals(bBack)) {
 				dispose();
-				LoginView lv = new LoginView();
+				Login l = new Login();
 
 			}
 
@@ -172,7 +172,7 @@ public class RegisterView extends JFrame {
 							}
 
 							dispose();
-							LoginView lv = new LoginView();
+							Login lv = new Login();
 						}
 
 						// If NIF isn't valid.

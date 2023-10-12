@@ -1,4 +1,4 @@
-package com.RA2_Grupo2.windows;
+package com.RA2_Grupo2.views;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -19,7 +19,7 @@ import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Supplier;
 
 @SuppressWarnings("serial")
-public class InsertSupplierView extends JFrame {
+public class InsertSupplier extends JFrame {
 
 	// Attributes declaration.
 
@@ -31,7 +31,7 @@ public class InsertSupplierView extends JFrame {
 
 	// Constructor.
 
-	public InsertSupplierView() {
+	public InsertSupplier() {
 
 		// Windows Properties.
 
@@ -120,7 +120,7 @@ public class InsertSupplierView extends JFrame {
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
-					MainView.refreshTable();
+					Main.refreshTable();
 					dispose();
 				}
 			} else if (e.getSource().equals(jbcancel)) {

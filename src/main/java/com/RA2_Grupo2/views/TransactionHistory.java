@@ -1,4 +1,4 @@
-package com.RA2_Grupo2.windows;
+package com.RA2_Grupo2.views;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -21,7 +21,7 @@ import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Transaction;
 
 @SuppressWarnings("serial")
-public class TransactionHistoryView extends JFrame {
+public class TransactionHistory extends JFrame {
 
 	// Attributes.
 
@@ -32,7 +32,7 @@ public class TransactionHistoryView extends JFrame {
 
 	private static List<Transaction> listT = new ArrayList<>();
 
-	public TransactionHistoryView() {
+	public TransactionHistory() {
 		super("Transactions");
 
 		setSize(720, 500);
@@ -114,7 +114,7 @@ public class TransactionHistoryView extends JFrame {
 	}
 
 	public static void setListT(List<Transaction> listT) {
-		TransactionHistoryView.listT = listT;
+		TransactionHistory.listT = listT;
 	}
 
 	public static void refreshTable() {
@@ -138,7 +138,7 @@ public class TransactionHistoryView extends JFrame {
 			Transaction t = iter.next();
 			dtm.addRow(new Object[] { t.getQuantity(), t.getDate() });
 		}
-		TransactionHistoryView.table.setModel(dtm);
+		TransactionHistory.table.setModel(dtm);
 
 	}
 
@@ -153,7 +153,7 @@ public class TransactionHistoryView extends JFrame {
 
 			} else if (e.getSource().equals(bBack)) {
 				dispose();
-				MainView mv = new MainView();
+				Main m = new Main();
 			}
 		}
 

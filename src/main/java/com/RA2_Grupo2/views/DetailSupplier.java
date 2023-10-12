@@ -1,4 +1,4 @@
-package com.RA2_Grupo2.windows;
+package com.RA2_Grupo2.views;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,7 @@ import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Supplier;
 
 @SuppressWarnings("serial")
-public class DetailSupplierView extends JFrame {
+public class DetailSupplier extends JFrame {
 
 	// Attributes declaration.
 
@@ -29,7 +29,7 @@ public class DetailSupplierView extends JFrame {
 
 	// Constructor.
 
-	public DetailSupplierView(Supplier supplier) {
+	public DetailSupplier(Supplier supplier) {
 
 		// Windows Properties.
 

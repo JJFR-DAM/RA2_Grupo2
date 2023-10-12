@@ -1,8 +1,9 @@
-package com.RA2_Grupo2.windows;
+package com.RA2_Grupo2.views;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,14 +26,14 @@ import com.RA2_Grupo2.objects.Product;
 import com.RA2_Grupo2.objects.Supplier;
 
 @SuppressWarnings("serial")
-public class MainView extends JFrame {
+public class Main extends JFrame {
 
 	// Attributes.
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
 	private JLabel currentUser, currentTable;
-	private JButton bInsert, bDelete, bUpdate, bDetails, bInventory, bLogout;
+	private JButton bInsert, bDelete, bUpdate, bDetails, bInventory, bTransaction, bLogout;
 	private JScrollBar scrollBar;
 	private JComboBox<String> jcb1, jcb2, jcb3;
 
@@ -45,11 +46,11 @@ public class MainView extends JFrame {
 
 	// Constructor.
 
-	public MainView() {
+	public Main() {
 
 		// Windows Properties.
 
-		super(options[option] + "s");
+		super("Products & Supplier");
 		setSize(720, 600);
 		WindowsPreset.windowPreset(this);
 		getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -91,53 +92,63 @@ public class MainView extends JFrame {
 
 		bHandler handler = new bHandler();
 
-		bInventory = new JButton();
-		bInventory.setBounds(32, 341, 65, 65);
-		WindowsPreset.buttonPreset(bInventory, "Open inventory view.", "src/main/resources/icons/transaccion.png");
-		bInventory.addActionListener(handler);
-
 		// Button for create.
 
 		bInsert = new JButton();
-		bInsert.setBounds(32, 41, 65, 65);
+		bInsert.setBounds(32, 10, 65, 65);
 		WindowsPreset.buttonPreset(bInsert, "Insert a product in the table", "src/main/resources/icons/insertar.png");
 		bInsert.addActionListener(handler);
 
 		// Button for delete.
 
 		bDelete = new JButton();
-		bDelete.setBounds(32, 116, 65, 65);
+		bDelete.setBounds(32, 85, 65, 65);
 		WindowsPreset.buttonPreset(bDelete, "Delete a product of the table", "src/main/resources/icons/borrar.png");
 		bDelete.addActionListener(handler);
 
 		// Button for update.
 
 		bUpdate = new JButton();
-		bUpdate.setBounds(32, 191, 65, 65);
+		bUpdate.setBounds(32, 160, 65, 65);
 		WindowsPreset.buttonPreset(bUpdate, "Update a product of the table", "src/main/resources/icons/actualizar.png");
 		bUpdate.addActionListener(handler);
 
 		// Button for read.
 
 		bDetails = new JButton();
-		bDetails.setBounds(32, 266, 65, 65);
+		bDetails.setBounds(32, 235, 65, 65);
 		WindowsPreset.buttonPreset(bDetails, "Details a product of the table", "src/main/resources/icons/lupa.png");
 		bDetails.addActionListener(handler);
+
+		// Button for open Inventory.
+
+		bInventory = new JButton();
+		bInventory.setBounds(32, 310, 65, 65);
+		WindowsPreset.buttonPreset(bInventory, "Open inventory view.", "src/main/resources/icons/inventario.png");
+		bInventory.addActionListener(handler);
+
+		// Button for open Transactions.
+
+		bTransaction = new JButton();
+		bTransaction.setBounds(32, 385, 65, 65);
+		WindowsPreset.buttonPreset(bTransaction, "Open transactions view.", "src/main/resources/icons/transaccion.png");
+		bTransaction.addActionListener(handler);
 
 		// Button for close the program.
 
 		bLogout = new JButton();
-		bLogout.setBounds(32, 457, 65, 65);
+		bLogout.setBounds(32, 488, 65, 65);
 		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
 		bLogout.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
-		pbutton.add(bInventory);
 		pbutton.add(bInsert);
 		pbutton.add(bDelete);
 		pbutton.add(bUpdate);
 		pbutton.add(bDetails);
+		pbutton.add(bInventory);
+		pbutton.add(bTransaction);
 		pbutton.add(bLogout);
 
 		getContentPane().add(pbutton);
@@ -158,7 +169,7 @@ public class MainView extends JFrame {
 		jcb3.setVisible(false);
 		getContentPane().add(jcb3);
 
-		currentUser = new JLabel("User: " + LoginView.currentUser);
+		currentUser = new JLabel("User: " + Login.currentUser);
 		currentUser.setBounds(138, 55, 200, 25);
 		getContentPane().add(currentUser);
 
@@ -176,7 +187,7 @@ public class MainView extends JFrame {
 	}
 
 	public static void setListP(List<Product> listP) {
-		MainView.listP = listP;
+		Main.listP = listP;
 	}
 
 	public static List<Supplier> getListS() {
@@ -184,7 +195,7 @@ public class MainView extends JFrame {
 	}
 
 	public static void setListS(List<Supplier> listS) {
-		MainView.listS = listS;
+		Main.listS = listS;
 	}
 
 	public static void refreshTable() {
@@ -197,7 +208,7 @@ public class MainView extends JFrame {
 
 		};
 		if (option == 0) {
-			String[] columns = { "ID", "CAT", "NAME", "PRICE" };
+			String[] columns = { "CAT", "NAME", "PRICE" };
 			dtm.setColumnIdentifiers(columns);
 			try {
 				listP = SQL_Methods.getProducts();
@@ -208,12 +219,12 @@ public class MainView extends JFrame {
 			while (iter.hasNext()) {
 				Product p = iter.next();
 				if (p.getDeleted() == 0) {
-					dtm.addRow(new Object[] { p.getId(), p.getCategory(), p.getName(), p.getPrice() });
+					dtm.addRow(new Object[] { p.getCategory(), p.getName(), p.getPrice() });
 				}
 			}
-			MainView.table.setModel(dtm);
+			Main.table.setModel(dtm);
 		} else {
-			String[] columns = { "ID", "NAME", "PHONE" };
+			String[] columns = { "NAME", "PHONE" };
 			dtm.setColumnIdentifiers(columns);
 			try {
 				listS = SQL_Methods.getSuppliers();
@@ -224,26 +235,24 @@ public class MainView extends JFrame {
 			while (iter.hasNext()) {
 				Supplier s = iter.next();
 				if (s.getDeleted() == 0) {
-					dtm.addRow(new Object[] { s.getId(), s.getName(), s.getPhone() });
+					dtm.addRow(new Object[] { s.getName(), s.getPhone() });
 				}
 			}
-			MainView.table.setModel(dtm);
+			Main.table.setModel(dtm);
 
 		}
 	}
 
 	private class bHandler implements ActionListener {
-
 		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(bInsert)) {
 				if (option == 0) {
-					InsertProductView ipv = new InsertProductView();
+					InsertProduct2 ip = new InsertProduct2();
 				} else {
-					InsertSupplierView isv = new InsertSupplierView();
+					InsertSupplier is = new InsertSupplier();
 				}
-
 			} else if (e.getSource().equals(bDelete)) {
 				if (option == 0) {
 					int option = table.getSelectedRow();
@@ -252,9 +261,12 @@ public class MainView extends JFrame {
 								JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 						if (resp == 0) {
 							Product p = listP.get(option);
+							if (!p.getImage().split("/")[3].equals("defaultImages")) {
+								new File(getListP().get(option).getImage()).delete();
+							}
 							try {
 								SQL_Methods.deleteProduct(p);
-								MainView.refreshTable();
+								Main.refreshTable();
 							} catch (SQLException e1) {
 								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
 										JOptionPane.WARNING_MESSAGE);
@@ -273,7 +285,7 @@ public class MainView extends JFrame {
 							Supplier s = listS.get(option);
 							try {
 								SQL_Methods.deleteSupplier(s);
-								MainView.refreshTable();
+								Main.refreshTable();
 							} catch (SQLException e1) {
 								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
 										JOptionPane.WARNING_MESSAGE);
@@ -284,24 +296,27 @@ public class MainView extends JFrame {
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
-
 			} else if (e.getSource().equals(bUpdate)) {
 				if (option == 0) {
-					UpdateProductView upv = new UpdateProductView(listP.get(MainView.table.getSelectedRow()));
+					UpdateProduct2 up = new UpdateProduct2(listP.get(Main.table.getSelectedRow()));
 				} else {
-					UpdateSupplierView usv = new UpdateSupplierView(listS.get(MainView.table.getSelectedRow()));
+					UpdateSupplier us = new UpdateSupplier(listS.get(Main.table.getSelectedRow()));
 				}
-
 			} else if (e.getSource().equals(bDetails)) {
 				if (option == 0) {
-					// Crear vistas de detalles
+					DetailProduct dp = new DetailProduct(listP.get(Main.table.getSelectedRow()));
 				} else {
-
+					DetailSupplier ds = new DetailSupplier(listS.get(Main.table.getSelectedRow()));
 				}
-
+			} else if (e.getSource().equals(bInventory)) {
+				dispose();
+				Inventory i = new Inventory();
+			} else if (e.getSource().equals(bTransaction)) {
+				dispose();
+				TransactionHistory th = new TransactionHistory();
 			} else if (e.getSource().equals(bLogout)) {
 				dispose();
-				LoginView lv = new LoginView();
+				Login l = new Login();
 			} else if (e.getSource().equals(jcb1)) {
 				if (jcb1.getSelectedIndex() == 0) {
 					option = 0;
@@ -327,9 +342,6 @@ public class MainView extends JFrame {
 
 			} else if (e.getSource().equals(jcb3)) {
 
-			} else if (e.getSource().equals(bInventory)) {
-				dispose();
-				InventoryView iv = new InventoryView();
 			}
 		}
 

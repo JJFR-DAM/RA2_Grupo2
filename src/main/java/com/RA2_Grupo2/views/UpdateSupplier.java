@@ -1,4 +1,4 @@
-package com.RA2_Grupo2.windows;
+package com.RA2_Grupo2.views;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -19,7 +19,7 @@ import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Supplier;
 
 @SuppressWarnings("serial")
-public class UpdateSupplierView extends JFrame {
+public class UpdateSupplier extends JFrame {
 
 	// Attributes declaration.
 
@@ -32,7 +32,7 @@ public class UpdateSupplierView extends JFrame {
 
 	// Constructor.
 
-	public UpdateSupplierView(Supplier supplier) {
+	public UpdateSupplier(Supplier supplier) {
 
 		// Windows Properties.
 
@@ -126,7 +126,7 @@ public class UpdateSupplierView extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					MainView.refreshTable();
+					Main.refreshTable();
 					dispose();
 				}
 			} else if (e.getSource().equals(jbcancel)) {
