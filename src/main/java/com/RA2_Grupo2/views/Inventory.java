@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
-import com.RA2_Grupo2.objects.Transaction;
+import com.RA2_Grupo2.objects.Product;
 
 @SuppressWarnings("serial")
 public class Inventory extends JFrame {
@@ -27,24 +27,24 @@ public class Inventory extends JFrame {
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
-	private JButton bAdd, bSubtract, bBack;
+	private JButton bProductAndSupplier, bTransaction, bLogout;
 	private JScrollBar scrollBar;
 
-	private static List<Transaction> listT = new ArrayList<>();
+	private static List<Product> listP = new ArrayList<>();
 
 	public Inventory() {
 		super("Inventory");
 
-		setSize(720, 500);
+		setSize(585, 575);
 		WindowsPreset.windowPreset(this);
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 
 		// Panels.
 
 		ptable = new JPanel();
-		ptable.setBounds(10, 10, 565, 443);
+		ptable.setBounds(10, 10, 551, 443);
 		pbutton = new JPanel();
-		pbutton.setBounds(575, 0, 130, 540);
+		pbutton.setBounds(0, 454, 571, 84);
 		getContentPane().setLayout(null);
 
 		// Table.
@@ -59,7 +59,7 @@ public class Inventory extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBackground(Color.GRAY);
 		scrollPane.setLocation(0, 0);
-		scrollPane.setSize(565, 465);
+		scrollPane.setSize(551, 443);
 		ptable.add(scrollPane);
 
 		getContentPane().add(ptable);
@@ -76,32 +76,34 @@ public class Inventory extends JFrame {
 
 		bHandler handler = new bHandler();
 
-		// Button for create.
+		// Button for open Inventory.
 
-		bAdd = new JButton();
-		bAdd.setBounds(32, 100, 65, 65);
-		WindowsPreset.buttonPreset(bAdd, "Add a shopping transaction.", "src/main/resources/icons/mas.png");
-		bAdd.addActionListener(handler);
+		bProductAndSupplier = new JButton();
+		bProductAndSupplier.setBounds(253, 10, 65, 65);
+		WindowsPreset.buttonPreset(bProductAndSupplier, "Open product and supplier management.",
+				"src/main/resources/icons/almacen.png");
+		bProductAndSupplier.addActionListener(handler);
 
-		// Button for delete.
+		// Button for open Transactions.
 
-		bSubtract = new JButton();
-		bSubtract.setBounds(32, 200, 65, 65);
-		WindowsPreset.buttonPreset(bSubtract, "Add a selling transaction.", "src/main/resources/icons/menos.png");
-		bSubtract.addActionListener(handler);
+		bTransaction = new JButton();
+		bTransaction.setBounds(358, 10, 65, 65);
+		WindowsPreset.buttonPreset(bTransaction, "Open transactions history.",
+				"src/main/resources/icons/transaccion.png");
+		bTransaction.addActionListener(handler);
 
 		// Button for close the program.
 
-		bBack = new JButton();
-		bBack.setBounds(32, 387, 65, 65);
-		WindowsPreset.buttonPreset(bBack, "Back to the main view", "src/main/resources/icons/volver.png");
-		bBack.addActionListener(handler);
+		bLogout = new JButton();
+		bLogout.setBounds(138, 10, 65, 65);
+		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
+		bLogout.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
-		pbutton.add(bAdd);
-		pbutton.add(bSubtract);
-		pbutton.add(bBack);
+		pbutton.add(bProductAndSupplier);
+		pbutton.add(bTransaction);
+		pbutton.add(bLogout);
 
 		getContentPane().add(pbutton);
 
@@ -109,12 +111,12 @@ public class Inventory extends JFrame {
 
 	}
 
-	public static List<Transaction> getListT() {
-		return listT;
+	public static List<Product> getListP() {
+		return listP;
 	}
 
-	public static void setListT(List<Transaction> listT) {
-		Inventory.listT = listT;
+	public static void setListT(List<Product> listP) {
+		Inventory.listP = listP;
 	}
 
 	public static void refreshTable() {
@@ -126,17 +128,19 @@ public class Inventory extends JFrame {
 			}
 
 		};
-		String[] columns = { "QUANTITY", "DATE" };
+		String[] columns = { "NAME", "QUANTITY" };
 		dtm.setColumnIdentifiers(columns);
 		try {
-			listT = SQL_Methods.getTransactions();
+			listP = SQL_Methods.getProducts();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		Iterator<Transaction> iter = listT.iterator();
+		Iterator<Product> iter = listP.iterator();
 		while (iter.hasNext()) {
-			Transaction t = iter.next();
-			dtm.addRow(new Object[] { t.getQuantity(), t.getDate() });
+			Product p = iter.next();
+			if (p.getDeleted() == 0) {
+				dtm.addRow(new Object[] { p.getName(), p.getQuantity() });
+			}
 		}
 		Inventory.table.setModel(dtm);
 
@@ -147,13 +151,15 @@ public class Inventory extends JFrame {
 		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(bAdd)) {
-
-			} else if (e.getSource().equals(bSubtract)) {
-
-			} else if (e.getSource().equals(bBack)) {
+			if (e.getSource().equals(bProductAndSupplier)) {
 				dispose();
-				Main m = new Main();
+				ProductAndSupplier ps = new ProductAndSupplier();
+			} else if (e.getSource().equals(bTransaction)) {
+				dispose();
+				TransactionHistory th = new TransactionHistory();
+			} else if (e.getSource().equals(bLogout)) {
+				dispose();
+				Login l = new Login();
 			}
 		}
 

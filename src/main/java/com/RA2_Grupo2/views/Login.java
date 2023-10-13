@@ -99,7 +99,7 @@ public class Login extends JFrame {
 								|| (em.getNIF().toUpperCase().equals(tUser.getText().toUpperCase())
 										&& em.getPassword().equals(tPass.getText()))) {
 							currentUser = em.getEmail();
-							Main m = new Main();
+							Inventory i = new Inventory();
 							dispose();
 						} else
 							isMatch = true;

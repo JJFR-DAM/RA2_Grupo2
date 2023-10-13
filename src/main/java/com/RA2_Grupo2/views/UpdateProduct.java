@@ -94,7 +94,7 @@ public class UpdateProduct extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				@SuppressWarnings("unused")
-				Main m = new Main();
+				ProductAndSupplier m = new ProductAndSupplier();
 				dispose();
 			}
 		});

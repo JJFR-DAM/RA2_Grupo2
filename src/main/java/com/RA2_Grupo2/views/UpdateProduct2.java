@@ -31,8 +31,8 @@ public class UpdateProduct2 extends JFrame {
 
 	// Attributes declaration.
 
-	private JLabel jlName, jlDescription, jlCat, jlPrice, jlQuantity, jlImg;
-	private JTextField jtName, jtCat, jtPrice, jtQuantity;
+	private JLabel jlName, jlDescription, jlCat, jlPrice, jlImg;
+	private JTextField jtName, jtCat, jtPrice;
 	private JTextArea jtDescription;
 	private JScrollPane jsDescription;
 	private JButton jbselector, jbconfirm, jbcancel;
@@ -47,8 +47,9 @@ public class UpdateProduct2 extends JFrame {
 		// Windows Properties.
 
 		super("Update");
-		setSize(400, 500);
+		setSize(400, 455);
 		WindowsPreset.windowPreset(this);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 
 		product = p;
@@ -92,21 +93,8 @@ public class UpdateProduct2 extends JFrame {
 		jtPrice.setText(String.valueOf(product.getPrice()));
 		getContentPane().add(jtPrice);
 
-		jlQuantity = new JLabel("Quantity:");
-		jlQuantity.setBounds(10, 175, 175, 35);
-		jlQuantity.setHorizontalAlignment(SwingConstants.CENTER);
-		jlQuantity.setBackground(Color.GRAY);
-		getContentPane().add(jlQuantity);
-		jtQuantity = new JTextField();
-		jtQuantity.setBounds(185, 175, 193, 35);
-		jtQuantity.setColumns(10);
-		jtQuantity.setHorizontalAlignment(SwingConstants.CENTER);
-		jtQuantity.setToolTipText("Insert quantity");
-		jtQuantity.setText(String.valueOf(product.getQuantity()));
-		getContentPane().add(jtQuantity);
-
 		jlDescription = new JLabel("Description:");
-		jlDescription.setBounds(10, 237, 175, 35);
+		jlDescription.setBounds(10, 192, 175, 35);
 		jlDescription.setHorizontalAlignment(SwingConstants.CENTER);
 		jlDescription.setBackground(Color.GRAY);
 		getContentPane().add(jlDescription);
@@ -115,11 +103,11 @@ public class UpdateProduct2 extends JFrame {
 		jtDescription.setToolTipText("Insert description");
 		jtDescription.setText(product.getDescription());
 		jsDescription = new JScrollPane(jtDescription);
-		jsDescription.setBounds(185, 220, 193, 70);
+		jsDescription.setBounds(185, 175, 193, 70);
 		getContentPane().add(jsDescription);
 
 		jlImg = new JLabel("Image:");
-		jlImg.setBounds(10, 300, 175, 35);
+		jlImg.setBounds(10, 255, 175, 35);
 		jlImg.setHorizontalAlignment(SwingConstants.CENTER);
 		jlImg.setBackground(Color.GRAY);
 		getContentPane().add(jlImg);
@@ -132,7 +120,7 @@ public class UpdateProduct2 extends JFrame {
 
 		jbselector = new JButton("Select Image");
 		jbselector.setToolTipText("Open JFileChooser");
-		jbselector.setBounds(185, 300, 193, 35);
+		jbselector.setBounds(185, 255, 193, 35);
 		jbselector.setBackground(Color.LIGHT_GRAY);
 		getContentPane().add(jbselector);
 		jbselector.addActionListener(handler);
@@ -140,7 +128,7 @@ public class UpdateProduct2 extends JFrame {
 		// Button to confirm the insertion.
 
 		jbconfirm = new JButton();
-		jbconfirm.setBounds(235, 365, 65, 65);
+		jbconfirm.setBounds(235, 320, 65, 65);
 		WindowsPreset.buttonPreset(jbconfirm, "Insert the product", "src/main/resources/icons/confirmar.png");
 		jbconfirm.setBackground(new Color(89, 166, 89));
 		jbconfirm.addActionListener(handler);
@@ -149,7 +137,7 @@ public class UpdateProduct2 extends JFrame {
 		// Button to cancel the insertion.
 
 		jbcancel = new JButton();
-		jbcancel.setBounds(100, 365, 65, 65);
+		jbcancel.setBounds(100, 320, 65, 65);
 		WindowsPreset.buttonPreset(jbcancel, "Cancel", "src/main/resources/icons/volver.png");
 		jbcancel.setBackground(new Color(166, 89, 89));
 		jbcancel.addActionListener(handler);
@@ -182,7 +170,7 @@ public class UpdateProduct2 extends JFrame {
 				if (!product.getImage().split("/")[3].equals("defaulImages")) {
 					new File(product.getImage()).delete();
 				}
-				
+
 				File img1 = jfc.getSelectedFile();
 				getContentPane().add(jfc);
 				jfc.setVisible(true);
@@ -213,7 +201,7 @@ public class UpdateProduct2 extends JFrame {
 				}
 			} else if (e.getSource().equals(jbconfirm)) {
 				if (jtDescription.getText().isBlank() || jtName.getText().isBlank() || jtCat.getText().isBlank()
-						|| jtPrice.getText().isBlank() || jtQuantity.getText().isBlank()) {
+						|| jtPrice.getText().isBlank()) {
 					JOptionPane.showMessageDialog(getContentPane(),
 							"You must fill every field to complete the data insertion. Try again.");
 				} else {
@@ -221,7 +209,6 @@ public class UpdateProduct2 extends JFrame {
 					int quantity = 0;
 					try {
 						price = Float.parseFloat(jtPrice.getText());
-						quantity = Integer.parseInt(jtQuantity.getText());
 						product.setName(jtName.getText());
 						product.setCategory(jtCat.getText());
 						product.setDescription(jtDescription.getText());
@@ -229,11 +216,10 @@ public class UpdateProduct2 extends JFrame {
 						product.setPrice(price);
 						product.setQuantity(quantity);
 						SQL_Methods.updateProduct(product);
-						Main.refreshTable();
+						ProductAndSupplier.refreshTable();
 						dispose();
 					} catch (NumberFormatException NFE) {
-						JOptionPane.showMessageDialog(null,
-								"You are trying to use wrong format for price or quantity.");
+						JOptionPane.showMessageDialog(null, "You are trying to use wrong format for price.");
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}

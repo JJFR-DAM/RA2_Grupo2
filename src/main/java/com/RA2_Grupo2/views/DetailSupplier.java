@@ -36,6 +36,7 @@ public class DetailSupplier extends JFrame {
 		super("Update");
 		setSize(400, 400);
 		WindowsPreset.windowPreset(this);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		s = supplier;
 

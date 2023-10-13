@@ -40,6 +40,7 @@ public class DetailProduct extends JFrame {
 		super("Detail");
 		setSize(700, 410);
 		WindowsPreset.windowPreset(this);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 
 		product = p;
@@ -127,7 +128,7 @@ public class DetailProduct extends JFrame {
 		// Button to cancel the insertion.
 
 		jbBack = new JButton();
-		jbBack.setBounds(310, 300, 65, 65);
+		jbBack.setBounds(60, 300, 65, 65);
 		WindowsPreset.buttonPreset(jbBack, "Back", "src/main/resources/icons/volver.png");
 		jbBack.addActionListener(new ActionListener() {
 

@@ -39,6 +39,7 @@ public class UpdateSupplier extends JFrame {
 		super("Update");
 		setSize(400, 365);
 		WindowsPreset.windowPreset(this);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		s = supplier;
 
@@ -126,7 +127,7 @@ public class UpdateSupplier extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					Main.refreshTable();
+					ProductAndSupplier.refreshTable();
 					dispose();
 				}
 			} else if (e.getSource().equals(jbcancel)) {

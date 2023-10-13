@@ -18,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
+import com.RA2_Grupo2.objects.Product;
+import com.RA2_Grupo2.objects.Supplier;
 import com.RA2_Grupo2.objects.Transaction;
 
 @SuppressWarnings("serial")
@@ -27,7 +29,7 @@ public class TransactionHistory extends JFrame {
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
-	private JButton bAdd, bSubtract, bBack;
+	private JButton bSum, bSubtract, bBack;
 	private JScrollBar scrollBar;
 
 	private static List<Transaction> listT = new ArrayList<>();
@@ -35,16 +37,16 @@ public class TransactionHistory extends JFrame {
 	public TransactionHistory() {
 		super("Transactions");
 
-		setSize(720, 500);
+		setSize(585, 575);
 		WindowsPreset.windowPreset(this);
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 
 		// Panels.
 
 		ptable = new JPanel();
-		ptable.setBounds(10, 10, 565, 443);
+		ptable.setBounds(10, 10, 551, 443);
 		pbutton = new JPanel();
-		pbutton.setBounds(575, 0, 130, 540);
+		pbutton.setBounds(0, 454, 571, 84);
 		getContentPane().setLayout(null);
 
 		// Table.
@@ -78,28 +80,28 @@ public class TransactionHistory extends JFrame {
 
 		// Button for create.
 
-		bAdd = new JButton();
-		bAdd.setBounds(32, 100, 65, 65);
-		WindowsPreset.buttonPreset(bAdd, "Add a shopping transaction.", "src/main/resources/icons/mas.png");
-		bAdd.addActionListener(handler);
+		bSum = new JButton();
+		bSum.setBounds(253, 10, 65, 65);
+		WindowsPreset.buttonPreset(bSum, "Add a shopping transaction.", "src/main/resources/icons/mas.png");
+		bSum.addActionListener(handler);
 
 		// Button for delete.
 
 		bSubtract = new JButton();
-		bSubtract.setBounds(32, 200, 65, 65);
+		bSubtract.setBounds(358, 10, 65, 65);
 		WindowsPreset.buttonPreset(bSubtract, "Add a selling transaction.", "src/main/resources/icons/menos.png");
 		bSubtract.addActionListener(handler);
 
 		// Button for close the program.
 
 		bBack = new JButton();
-		bBack.setBounds(32, 387, 65, 65);
+		bBack.setBounds(138, 10, 65, 65);
 		WindowsPreset.buttonPreset(bBack, "Back to the main view", "src/main/resources/icons/volver.png");
 		bBack.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
-		pbutton.add(bAdd);
+		pbutton.add(bSum);
 		pbutton.add(bSubtract);
 		pbutton.add(bBack);
 
@@ -126,17 +128,19 @@ public class TransactionHistory extends JFrame {
 			}
 
 		};
-		String[] columns = { "QUANTITY", "DATE" };
+		String[] columns = { "PRODUCT", "SUPPLIER", "QUANTITY", "DATE" };
 		dtm.setColumnIdentifiers(columns);
 		try {
 			listT = SQL_Methods.getTransactions();
+			Iterator<Transaction> iter = listT.iterator();
+			while (iter.hasNext()) {
+				Transaction t = iter.next();
+				Product p = SQL_Methods.getProductFromId(t.getProductId());
+				Supplier s = SQL_Methods.getSupplierFromId(t.getSupplierId());
+				dtm.addRow(new Object[] { p.getName(), s.getName(), t.getQuantity(), t.getDate() });
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		Iterator<Transaction> iter = listT.iterator();
-		while (iter.hasNext()) {
-			Transaction t = iter.next();
-			dtm.addRow(new Object[] { t.getQuantity(), t.getDate() });
 		}
 		TransactionHistory.table.setModel(dtm);
 
@@ -147,13 +151,18 @@ public class TransactionHistory extends JFrame {
 		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(bAdd)) {
+			String option;
+			if (e.getSource().equals(bSum)) {
+				option = "Sum";
+				InsertTransaction st = new InsertTransaction(option);
 
 			} else if (e.getSource().equals(bSubtract)) {
+				option = "Subtract";
+				InsertTransaction st = new InsertTransaction(option);
 
 			} else if (e.getSource().equals(bBack)) {
 				dispose();
-				Main m = new Main();
+				Inventory i = new Inventory();
 			}
 		}
 

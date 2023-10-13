@@ -12,7 +12,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -26,41 +25,39 @@ import com.RA2_Grupo2.objects.Product;
 import com.RA2_Grupo2.objects.Supplier;
 
 @SuppressWarnings("serial")
-public class Main extends JFrame {
+public class ProductAndSupplier extends JFrame {
 
 	// Attributes.
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
-	private JLabel currentUser, currentTable;
-	private JButton bInsert, bDelete, bUpdate, bDetails, bInventory, bTransaction, bLogout;
 	private JScrollBar scrollBar;
-	private JComboBox<String> jcb1, jcb2, jcb3;
+	private JButton bInsert, bDelete, bUpdate, bDetails, bLogout;
+	private JComboBox<String> jcb1, jcb2;
 
 	private static int option = 0;
 	private static String[] options = { "Product", "Supplier" };
-	private static String[] filter1 = { "Name", "Category", "Price", "Quantity" };
-	private static String[] filter2 = { "Name", "Phone" };
+	private static String[] filter1 = { "Name", "Category", "Price" };
 	private static List<Product> listP = new ArrayList<>();
 	private static List<Supplier> listS = new ArrayList<>();
 
 	// Constructor.
 
-	public Main() {
+	public ProductAndSupplier() {
 
 		// Windows Properties.
 
 		super("Products & Supplier");
-		setSize(720, 600);
+		setSize(720, 555);
 		WindowsPreset.windowPreset(this);
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 
 		// Panels.
 
 		ptable = new JPanel();
-		ptable.setBounds(10, 90, 565, 465);
+		ptable.setBounds(10, 45, 565, 465);
 		pbutton = new JPanel();
-		pbutton.setBounds(575, 0, 130, 563);
+		pbutton.setBounds(576, 45, 130, 465);
 		getContentPane().setLayout(null);
 
 		// Table.
@@ -120,25 +117,11 @@ public class Main extends JFrame {
 		WindowsPreset.buttonPreset(bDetails, "Details a product of the table", "src/main/resources/icons/lupa.png");
 		bDetails.addActionListener(handler);
 
-		// Button for open Inventory.
-
-		bInventory = new JButton();
-		bInventory.setBounds(32, 310, 65, 65);
-		WindowsPreset.buttonPreset(bInventory, "Open inventory view.", "src/main/resources/icons/inventario.png");
-		bInventory.addActionListener(handler);
-
-		// Button for open Transactions.
-
-		bTransaction = new JButton();
-		bTransaction.setBounds(32, 385, 65, 65);
-		WindowsPreset.buttonPreset(bTransaction, "Open transactions view.", "src/main/resources/icons/transaccion.png");
-		bTransaction.addActionListener(handler);
-
 		// Button for close the program.
 
 		bLogout = new JButton();
-		bLogout.setBounds(32, 488, 65, 65);
-		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
+		bLogout.setBounds(32, 350, 65, 65);
+		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/volver.png");
 		bLogout.addActionListener(handler);
 
 		pbutton.setLayout(null);
@@ -147,35 +130,19 @@ public class Main extends JFrame {
 		pbutton.add(bDelete);
 		pbutton.add(bUpdate);
 		pbutton.add(bDetails);
-		pbutton.add(bInventory);
-		pbutton.add(bTransaction);
 		pbutton.add(bLogout);
 
 		getContentPane().add(pbutton);
 
 		jcb1 = new JComboBox<String>(options);
-		jcb1.setBounds(348, 10, 130, 25);
+		jcb1.setBounds(10, 10, 130, 25);
 		jcb1.addActionListener(handler);
 		getContentPane().add(jcb1);
 
 		jcb2 = new JComboBox<String>(filter1);
-		jcb2.setBounds(348, 55, 200, 25);
+		jcb2.setBounds(496, 10, 200, 25);
 		jcb2.addActionListener(handler);
 		getContentPane().add(jcb2);
-
-		jcb3 = new JComboBox<String>(filter2);
-		jcb3.setBounds(348, 55, 200, 25);
-		jcb3.addActionListener(handler);
-		jcb3.setVisible(false);
-		getContentPane().add(jcb3);
-
-		currentUser = new JLabel("User: " + Login.currentUser);
-		currentUser.setBounds(138, 55, 200, 25);
-		getContentPane().add(currentUser);
-
-		currentTable = new JLabel("THE TABLE IS SHOWING: ");
-		currentTable.setBounds(181, 10, 157, 25);
-		getContentPane().add(currentTable);
 
 		setVisible(true);
 	}
@@ -187,7 +154,7 @@ public class Main extends JFrame {
 	}
 
 	public static void setListP(List<Product> listP) {
-		Main.listP = listP;
+		ProductAndSupplier.listP = listP;
 	}
 
 	public static List<Supplier> getListS() {
@@ -195,7 +162,7 @@ public class Main extends JFrame {
 	}
 
 	public static void setListS(List<Supplier> listS) {
-		Main.listS = listS;
+		ProductAndSupplier.listS = listS;
 	}
 
 	public static void refreshTable() {
@@ -222,7 +189,7 @@ public class Main extends JFrame {
 					dtm.addRow(new Object[] { p.getCategory(), p.getName(), p.getPrice() });
 				}
 			}
-			Main.table.setModel(dtm);
+			ProductAndSupplier.table.setModel(dtm);
 		} else {
 			String[] columns = { "NAME", "PHONE" };
 			dtm.setColumnIdentifiers(columns);
@@ -238,7 +205,7 @@ public class Main extends JFrame {
 					dtm.addRow(new Object[] { s.getName(), s.getPhone() });
 				}
 			}
-			Main.table.setModel(dtm);
+			ProductAndSupplier.table.setModel(dtm);
 
 		}
 	}
@@ -266,7 +233,7 @@ public class Main extends JFrame {
 							}
 							try {
 								SQL_Methods.deleteProduct(p);
-								Main.refreshTable();
+								ProductAndSupplier.refreshTable();
 							} catch (SQLException e1) {
 								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
 										JOptionPane.WARNING_MESSAGE);
@@ -285,7 +252,7 @@ public class Main extends JFrame {
 							Supplier s = listS.get(option);
 							try {
 								SQL_Methods.deleteSupplier(s);
-								Main.refreshTable();
+								ProductAndSupplier.refreshTable();
 							} catch (SQLException e1) {
 								JOptionPane.showMessageDialog(null, "Something went wrong. Try again later.", "Warning",
 										JOptionPane.WARNING_MESSAGE);
@@ -297,26 +264,33 @@ public class Main extends JFrame {
 					}
 				}
 			} else if (e.getSource().equals(bUpdate)) {
-				if (option == 0) {
-					UpdateProduct2 up = new UpdateProduct2(listP.get(Main.table.getSelectedRow()));
+				int option = table.getSelectedRow();
+				if (option >= 0) {
+					if (ProductAndSupplier.option == 0) {
+						UpdateProduct2 up = new UpdateProduct2(listP.get(option));
+					} else {
+						UpdateSupplier us = new UpdateSupplier(listS.get(option));
+					}
 				} else {
-					UpdateSupplier us = new UpdateSupplier(listS.get(Main.table.getSelectedRow()));
+					JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			} else if (e.getSource().equals(bDetails)) {
-				if (option == 0) {
-					DetailProduct dp = new DetailProduct(listP.get(Main.table.getSelectedRow()));
+				int option = table.getSelectedRow();
+				if (option >= 0) {
+					if (ProductAndSupplier.option == 0) {
+						DetailProduct dp = new DetailProduct(listP.get(option));
+					} else {
+						DetailSupplier ds = new DetailSupplier(listS.get(option));
+					}
+
 				} else {
-					DetailSupplier ds = new DetailSupplier(listS.get(Main.table.getSelectedRow()));
+					JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
-			} else if (e.getSource().equals(bInventory)) {
-				dispose();
-				Inventory i = new Inventory();
-			} else if (e.getSource().equals(bTransaction)) {
-				dispose();
-				TransactionHistory th = new TransactionHistory();
 			} else if (e.getSource().equals(bLogout)) {
 				dispose();
-				Login l = new Login();
+				Inventory i = new Inventory();
 			} else if (e.getSource().equals(jcb1)) {
 				if (jcb1.getSelectedIndex() == 0) {
 					option = 0;
@@ -326,7 +300,6 @@ public class Main extends JFrame {
 					bDetails.setToolTipText("Details a product of the table");
 					refreshTable();
 					jcb2.setVisible(true);
-					jcb3.setVisible(false);
 				} else {
 					option = 1;
 					bInsert.setToolTipText("Insert a supplier in the table");
@@ -334,13 +307,10 @@ public class Main extends JFrame {
 					bUpdate.setToolTipText("Update a supplier of the table");
 					bDetails.setToolTipText("Details a supplier of the table");
 					refreshTable();
-					jcb3.setVisible(true);
 					jcb2.setVisible(false);
 				}
 
 			} else if (e.getSource().equals(jcb2)) {
-
-			} else if (e.getSource().equals(jcb3)) {
 
 			}
 		}
