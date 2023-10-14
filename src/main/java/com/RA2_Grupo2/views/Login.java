@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -46,6 +48,28 @@ public class Login extends JFrame {
 		tPass = new JPasswordField(10);
 		tPass.setBounds(200, 100, 150, 25);
 		tPass.setToolTipText("Enter Password");
+		tPass.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == 10) {
+					login();
+				}
+
+			}
+		});
 
 		lIncorrect = new JLabel("USER OR PASSWORD WRONG");
 		lIncorrect.setBounds(80, 136, 270, 14);
@@ -87,34 +111,41 @@ public class Login extends JFrame {
 	}
 
 	public class bHandler implements ActionListener {
-		@SuppressWarnings({ "unused", "deprecation" })
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(bLogIn)) {
-				try {
-					boolean isMatch = false;
-					listE = SQL_Methods.getEmployees();
-					for (Employee em : listE) {
-						if ((em.getEmail().equals(tUser.getText()) && em.getPassword().equals(tPass.getText()))
-								|| (em.getNIF().toUpperCase().equals(tUser.getText().toUpperCase())
-										&& em.getPassword().equals(tPass.getText()))) {
-							currentUser = em.getEmail();
-							Inventory i = new Inventory();
-							dispose();
-						} else
-							isMatch = true;
-
-					}
-					lIncorrect.setVisible(isMatch);
-
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-
+				login();
 			} else if (e.getSource().equals(bSignUp)) {
+				@SuppressWarnings("unused")
 				Register r = new Register();
 				dispose();
 			}
+		}
+
+	}
+
+	@SuppressWarnings("deprecation")
+	public void login() {
+		try {
+			boolean isMatch = false;
+			listE = SQL_Methods.getEmployees();
+			for (Employee em : listE) {
+				if ((em.getEmail().equals(tUser.getText()) && em.getPassword().equals(tPass.getText()))
+						|| (em.getNIF().toUpperCase().equals(tUser.getText().toUpperCase())
+								&& em.getPassword().equals(tPass.getText()))) {
+					currentUser = em.getEmail();
+					@SuppressWarnings("unused")
+					Inventory i = new Inventory();
+					dispose();
+				} else
+					isMatch = true;
+
+			}
+			lIncorrect.setVisible(isMatch);
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 
 	}

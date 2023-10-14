@@ -147,39 +147,47 @@ public class Register extends JFrame {
 
 					if (tPass.getText().equals(tPass2.getText())) {
 
-						// If NIF is valid.
+						// If password doesn't have six or more characters.
 
-						if (bNIF) {
+						if (tPass.getText().length() >= 6) {
 
-							// Create employee.
+							// If NIF is valid.
 
-							Employee em = new Employee(tNIF.getText().toUpperCase(), tName.getText(),
-									tSurname.getText(), tEmail.getText(), tPass.getText());
-							int id = 0;
-							try {
-								id = SQL_Methods.getMaxIdFromTable("employees");
-							} catch (SQLException e1) {
-								e1.printStackTrace();
+							if (bNIF) {
+
+								// Create employee.
+
+								Employee em = new Employee(tNIF.getText().toUpperCase(), tName.getText(),
+										tSurname.getText(), tEmail.getText(), tPass.getText());
+								int id = 0;
+								try {
+									id = SQL_Methods.getMaxIdFromTable("employees");
+								} catch (SQLException e1) {
+									e1.printStackTrace();
+								}
+								em.setId(id + 1);
+
+								// Method to insert Employee. Falta poner el id.
+
+								try {
+									SQL_Methods.insertEmployee(em);
+								} catch (SQLException e1) {
+									e1.printStackTrace();
+								}
+
+								dispose();
+								Login lv = new Login();
 							}
-							em.setId(id + 1);
 
-							// Method to insert Employee. Falta poner el id.
+							// If NIF isn't valid.
 
-							try {
-								SQL_Methods.insertEmployee(em);
-							} catch (SQLException e1) {
-								e1.printStackTrace();
+							else {
+								JOptionPane.showMessageDialog(getContentPane(), "The NIF isn't valid. Try again.");
 							}
 
-							dispose();
-							Login lv = new Login();
-						}
-
-						// If NIF isn't valid.
-
-						else {
-							JOptionPane.showMessageDialog(getContentPane(), "The NIF isn't valid. Try again.");
-						}
+						} else
+							JOptionPane.showMessageDialog(getContentPane(),
+									"The password need more characters. Try again.");
 					}
 
 					// If passwords don't match.

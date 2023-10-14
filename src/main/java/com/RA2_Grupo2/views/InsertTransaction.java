@@ -150,7 +150,7 @@ public class InsertTransaction extends JFrame {
 						try {
 							Transaction t = new Transaction();
 							Product p = products.get(jcProduct.getSelectedIndex());
-							if (p.getQuantity() > Integer.valueOf(jtQuantity.getText())) {
+							if (p.getQuantity() >= Integer.valueOf(jtQuantity.getText())) {
 								t.setId(SQL_Methods.getMaxIdFromTable("transactions") + 1);
 								t.setProductId(p.getId());
 								t.setSupplierId(suppliers.get(jcSupplier.getSelectedIndex()).getId());

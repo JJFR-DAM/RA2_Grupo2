@@ -117,7 +117,9 @@ public class SQL_Methods {
 			p.setImage(rs.getString("image"));
 			p.setDeleted(rs.getInt("deleted"));
 
-			products.add(p);
+			if (p.getDeleted() == 0) {
+				products.add(p);
+			}
 		}
 		return products;
 	}
@@ -133,7 +135,10 @@ public class SQL_Methods {
 			s.setPhone(rs.getString("phone"));
 			s.setDeleted(rs.getInt("deleted"));
 
-			suppliers.add(s);
+			if (s.getDeleted() == 0) {
+				suppliers.add(s);
+
+			}
 		}
 		return suppliers;
 	}
@@ -264,5 +269,52 @@ public class SQL_Methods {
 	public static void deleteSupplier(Supplier s) throws SQLException {
 		s.setDeleted(1);
 		updateSupplier(s);
+	}
+
+	public static ArrayList<Product> filterProducts(String parameter, String filter) throws SQLException {
+		PreparedStatement st = connection.prepareStatement(
+				"SELECT * from products WHERE " + parameter.toLowerCase() + " LIKE '%" + filter.toLowerCase() + "%'");
+		ResultSet rs = st.executeQuery();
+		ArrayList<Product> products = new ArrayList<>();
+		while (rs.next()) {
+			Product p = new Product();
+			p.setId(rs.getInt("id"));
+			p.setQuantity(rs.getInt("quantity"));
+			p.setPrice(rs.getFloat("price"));
+			p.setName(rs.getString("name"));
+			p.setDescription(rs.getString("description"));
+			p.setCategory(rs.getString("category"));
+			p.setImage(rs.getString("image"));
+			p.setDeleted(rs.getInt("deleted"));
+
+			if (p.getDeleted() == 0) {
+				products.add(p);
+			}
+		}
+		return products;
+
+	}
+
+	public static ArrayList<Product> filterProductsPrice(String filter) throws SQLException {
+		PreparedStatement st = connection.prepareStatement("SELECT * from products ORDER BY price " + filter);
+		ResultSet rs = st.executeQuery();
+		ArrayList<Product> products = new ArrayList<>();
+		while (rs.next()) {
+			Product p = new Product();
+			p.setId(rs.getInt("id"));
+			p.setQuantity(rs.getInt("quantity"));
+			p.setPrice(rs.getFloat("price"));
+			p.setName(rs.getString("name"));
+			p.setDescription(rs.getString("description"));
+			p.setCategory(rs.getString("category"));
+			p.setImage(rs.getString("image"));
+			p.setDeleted(rs.getInt("deleted"));
+
+			if (p.getDeleted() == 0) {
+				products.add(p);
+			}
+		}
+		return products;
+
 	}
 }

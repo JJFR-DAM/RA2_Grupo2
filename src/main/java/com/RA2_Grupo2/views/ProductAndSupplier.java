@@ -3,6 +3,8 @@ package com.RA2_Grupo2.views;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,11 +14,14 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import com.RA2_Grupo2.methods.SQL_Methods;
@@ -32,12 +37,14 @@ public class ProductAndSupplier extends JFrame {
 	private JPanel ptable, pbutton;
 	public static JTable table;
 	private JScrollBar scrollBar;
-	private JButton bInsert, bDelete, bUpdate, bDetails, bLogout;
+	private JLabel lFilter;
+	private JTextField tFilter;
+	private JButton bInsert, bDelete, bUpdate, bDetails, bBack;
 	private JComboBox<String> jcb1, jcb2;
 
 	private static int option = 0;
 	private static String[] options = { "Product", "Supplier" };
-	private static String[] filter1 = { "Name", "Category", "Price" };
+	private static String[] filters = { "Name", "Category", "Price Ascendant", "Price Descendant" };
 	private static List<Product> listP = new ArrayList<>();
 	private static List<Supplier> listS = new ArrayList<>();
 
@@ -83,7 +90,47 @@ public class ProductAndSupplier extends JFrame {
 		scrollPane.setRowHeaderView(scrollBar);
 		getContentPane().add(ptable);
 
+		// Loading data into the table.
+
 		refreshTable();
+
+		// Label & TextField configuration.
+
+		lFilter = new JLabel("Filter by:");
+		lFilter.setBounds(222, 10, 100, 25);
+		lFilter.setHorizontalAlignment(SwingConstants.CENTER);
+		getContentPane().add(lFilter);
+		tFilter = new JTextField();
+		tFilter.setBounds(490, 10, 180, 25);
+		tFilter.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (tFilter.getText().isBlank()) {
+					refreshTable();
+				}
+				if (e.getKeyCode() >= 0) {
+					try {
+						setProductTable(SQL_Methods.filterProducts(jcb2.getSelectedItem().toString().toLowerCase(),
+								tFilter.getText().toLowerCase()));
+					} catch (SQLException sql) {
+					}
+				}
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+		});
+		getContentPane().add(tFilter);
 
 		// Buttons.
 
@@ -119,10 +166,10 @@ public class ProductAndSupplier extends JFrame {
 
 		// Button for close the program.
 
-		bLogout = new JButton();
-		bLogout.setBounds(32, 350, 65, 65);
-		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/volver.png");
-		bLogout.addActionListener(handler);
+		bBack = new JButton();
+		bBack.setBounds(32, 350, 65, 65);
+		WindowsPreset.buttonPreset(bBack, "Back", "src/main/resources/icons/volver.png");
+		bBack.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
@@ -130,22 +177,29 @@ public class ProductAndSupplier extends JFrame {
 		pbutton.add(bDelete);
 		pbutton.add(bUpdate);
 		pbutton.add(bDetails);
-		pbutton.add(bLogout);
-
+		pbutton.add(bBack);
 		getContentPane().add(pbutton);
+
+		// ComboBoxs.
+
+		// ComboBox to select between products and suppliers.
 
 		jcb1 = new JComboBox<String>(options);
 		jcb1.setBounds(10, 10, 130, 25);
 		jcb1.addActionListener(handler);
 		getContentPane().add(jcb1);
 
-		jcb2 = new JComboBox<String>(filter1);
-		jcb2.setBounds(496, 10, 200, 25);
+		// ComboBox to select between filters.
+
+		jcb2 = new JComboBox<String>(filters);
+		jcb2.setBounds(332, 10, 148, 25);
 		jcb2.addActionListener(handler);
 		getContentPane().add(jcb2);
 
 		setVisible(true);
 	}
+
+	// Auxiliary methods
 
 	// List's Getter & Setter.
 
@@ -165,7 +219,9 @@ public class ProductAndSupplier extends JFrame {
 		ProductAndSupplier.listS = listS;
 	}
 
-	public static void refreshTable() {
+	// Method to modularize the product data insertion into the table;
+
+	public static void setProductTable(ArrayList<Product> listP) {
 		DefaultTableModel dtm = new DefaultTableModel() {
 
 			@Override
@@ -174,23 +230,34 @@ public class ProductAndSupplier extends JFrame {
 			}
 
 		};
+		String[] columns = { "CAT", "NAME", "PRICE" };
+		dtm.setColumnIdentifiers(columns);
+		Iterator<Product> iter = listP.iterator();
+		while (iter.hasNext()) {
+			Product p = iter.next();
+
+			dtm.addRow(new Object[] { p.getCategory(), p.getName(), p.getPrice() });
+		}
+		ProductAndSupplier.table.setModel(dtm);
+	}
+
+	// Default reload of the table data.
+
+	public static void refreshTable() {
 		if (option == 0) {
-			String[] columns = { "CAT", "NAME", "PRICE" };
-			dtm.setColumnIdentifiers(columns);
 			try {
-				listP = SQL_Methods.getProducts();
+				setProductTable(SQL_Methods.getProducts());
 			} catch (SQLException e) {
-				e.printStackTrace();
 			}
-			Iterator<Product> iter = listP.iterator();
-			while (iter.hasNext()) {
-				Product p = iter.next();
-				if (p.getDeleted() == 0) {
-					dtm.addRow(new Object[] { p.getCategory(), p.getName(), p.getPrice() });
-				}
-			}
-			ProductAndSupplier.table.setModel(dtm);
 		} else {
+			DefaultTableModel dtm = new DefaultTableModel() {
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+
+			};
 			String[] columns = { "NAME", "PHONE" };
 			dtm.setColumnIdentifiers(columns);
 			try {
@@ -201,26 +268,34 @@ public class ProductAndSupplier extends JFrame {
 			Iterator<Supplier> iter = listS.iterator();
 			while (iter.hasNext()) {
 				Supplier s = iter.next();
-				if (s.getDeleted() == 0) {
-					dtm.addRow(new Object[] { s.getName(), s.getPhone() });
-				}
+				dtm.addRow(new Object[] { s.getName(), s.getPhone() });
+
 			}
 			ProductAndSupplier.table.setModel(dtm);
 
 		}
 	}
 
+	// Button handler configuration.
+
 	private class bHandler implements ActionListener {
 		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			// Open insert views.
+
 			if (e.getSource().equals(bInsert)) {
 				if (option == 0) {
 					InsertProduct2 ip = new InsertProduct2();
 				} else {
 					InsertSupplier is = new InsertSupplier();
 				}
-			} else if (e.getSource().equals(bDelete)) {
+			}
+
+			// Delete the selected object.
+
+			else if (e.getSource().equals(bDelete)) {
 				if (option == 0) {
 					int option = table.getSelectedRow();
 					if (option >= 0) {
@@ -263,7 +338,11 @@ public class ProductAndSupplier extends JFrame {
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
-			} else if (e.getSource().equals(bUpdate)) {
+			}
+
+			// Open update views.
+
+			else if (e.getSource().equals(bUpdate)) {
 				int option = table.getSelectedRow();
 				if (option >= 0) {
 					if (ProductAndSupplier.option == 0) {
@@ -275,7 +354,11 @@ public class ProductAndSupplier extends JFrame {
 					JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
 							JOptionPane.WARNING_MESSAGE);
 				}
-			} else if (e.getSource().equals(bDetails)) {
+			}
+
+			// Open detail views.
+
+			else if (e.getSource().equals(bDetails)) {
 				int option = table.getSelectedRow();
 				if (option >= 0) {
 					if (ProductAndSupplier.option == 0) {
@@ -288,10 +371,18 @@ public class ProductAndSupplier extends JFrame {
 					JOptionPane.showMessageDialog(null, "You must select one row.", "Warning",
 							JOptionPane.WARNING_MESSAGE);
 				}
-			} else if (e.getSource().equals(bLogout)) {
+			}
+
+			// Back to inventory view.
+
+			else if (e.getSource().equals(bBack)) {
 				dispose();
 				Inventory i = new Inventory();
-			} else if (e.getSource().equals(jcb1)) {
+			}
+
+			// Change the view between product and supply.
+
+			else if (e.getSource().equals(jcb1)) {
 				if (jcb1.getSelectedIndex() == 0) {
 					option = 0;
 					bInsert.setToolTipText("Insert a product in the table");
@@ -300,6 +391,8 @@ public class ProductAndSupplier extends JFrame {
 					bDetails.setToolTipText("Details a product of the table");
 					refreshTable();
 					jcb2.setVisible(true);
+					lFilter.setVisible(true);
+					tFilter.setVisible(true);
 				} else {
 					option = 1;
 					bInsert.setToolTipText("Insert a supplier in the table");
@@ -308,9 +401,41 @@ public class ProductAndSupplier extends JFrame {
 					bDetails.setToolTipText("Details a supplier of the table");
 					refreshTable();
 					jcb2.setVisible(false);
+					lFilter.setVisible(false);
+					tFilter.setVisible(false);
 				}
 
-			} else if (e.getSource().equals(jcb2)) {
+			}
+
+			// If filter by name or category, enable tFilter.
+
+			else if (jcb2.getSelectedItem().toString().equals("Name")
+					|| jcb2.getSelectedItem().toString().equals("Category")) {
+				tFilter.setEditable(true);
+
+			}
+
+			// If filter by price, disable tFilter.
+
+			else if (jcb2.getSelectedItem().toString().equals("Price Ascendant")) {
+
+				tFilter.setEditable(false);
+
+				try {
+					setProductTable(SQL_Methods.filterProductsPrice("DESC"));
+				} catch (SQLException sql) {
+				}
+
+			}
+
+			else if (jcb2.getSelectedItem().toString().equals("Price Descendant")) {
+
+				tFilter.setEditable(false);
+
+				try {
+					setProductTable(SQL_Methods.filterProductsPrice("ASC"));
+				} catch (SQLException sql) {
+				}
 
 			}
 		}

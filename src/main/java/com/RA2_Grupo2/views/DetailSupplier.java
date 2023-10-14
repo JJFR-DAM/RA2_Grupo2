@@ -1,10 +1,7 @@
 package com.RA2_Grupo2.views;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -24,7 +21,6 @@ public class DetailSupplier extends JFrame {
 	private JTextField jtId, jtName, jtPhone;
 	private JTextArea jtAddress;
 	private JScrollPane jsAddress;
-	private JButton jbBack;
 	private Supplier s;
 
 	// Constructor.
@@ -33,8 +29,8 @@ public class DetailSupplier extends JFrame {
 
 		// Windows Properties.
 
-		super("Update");
-		setSize(400, 400);
+		super("Detail");
+		setSize(400, 298);
 		WindowsPreset.windowPreset(this);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -94,24 +90,6 @@ public class DetailSupplier extends JFrame {
 		jsAddress = new JScrollPane(jtAddress);
 		jsAddress.setBounds(185, 165, 193, 70);
 		getContentPane().add(jsAddress);
-
-		// Button's configurations.
-
-		// Button to back.
-
-		jbBack = new JButton();
-		jbBack.setBounds(160, 265, 65, 65);
-		WindowsPreset.buttonPreset(jbBack, "Cancel", "src/main/resources/icons/volver.png");
-		jbBack.setBackground(new Color(166, 89, 89));
-		jbBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				dispose();
-
-			}
-		});
-		getContentPane().add(jbBack);
 
 		setVisible(true);
 	}

@@ -2,11 +2,8 @@ package com.RA2_Grupo2.views;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -26,7 +23,6 @@ public class DetailProduct extends JFrame {
 	private JTextField jtName, jtCat, jtPrice, jtQuantity;
 	private JTextArea jtDescription;
 	private JScrollPane jsDescription;
-	private JButton jbBack;
 	private Product product;
 
 	public static String url = "src/main/resources/defaultImages/default.png";
@@ -38,7 +34,7 @@ public class DetailProduct extends JFrame {
 		// Windows Properties.
 
 		super("Detail");
-		setSize(700, 410);
+		setSize(700, 365);
 		WindowsPreset.windowPreset(this);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -122,23 +118,6 @@ public class DetailProduct extends JFrame {
 		jlImg.setIcon(
 				new ImageIcon(new ImageIcon(p.getImage()).getImage().getScaledInstance(320, 250, Image.SCALE_DEFAULT)));
 		getContentPane().add(jlImg);
-
-		// Button's configurations.
-
-		// Button to cancel the insertion.
-
-		jbBack = new JButton();
-		jbBack.setBounds(60, 300, 65, 65);
-		WindowsPreset.buttonPreset(jbBack, "Back", "src/main/resources/icons/volver.png");
-		jbBack.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-
-			}
-		});
-		getContentPane().add(jbBack);
 
 		setVisible(true);
 	}
