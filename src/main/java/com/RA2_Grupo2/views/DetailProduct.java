@@ -31,7 +31,7 @@ public class DetailProduct extends JFrame {
 
 	public DetailProduct(Product p) {
 
-		// Windows Properties.
+		// Frame Properties.
 
 		super("Detail");
 		setSize(700, 365);

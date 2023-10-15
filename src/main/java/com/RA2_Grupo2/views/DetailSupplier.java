@@ -27,7 +27,7 @@ public class DetailSupplier extends JFrame {
 
 	public DetailSupplier(Supplier supplier) {
 
-		// Windows Properties.
+		// Frame Properties.
 
 		super("Detail");
 		setSize(400, 298);

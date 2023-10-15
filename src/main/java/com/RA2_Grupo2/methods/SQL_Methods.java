@@ -19,6 +19,8 @@ public class SQL_Methods {
 	private static String user = "root";
 	private static String pass = "";
 
+	// Method to connect to MySQL database.
+
 	public static boolean startConnection() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -33,6 +35,8 @@ public class SQL_Methods {
 		return false;
 	}
 
+	// Method to get max id value from some table.
+
 	public static int getMaxIdFromTable(String tableName) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("SELECT MAX(id) from " + tableName);
 		ResultSet rs = st.executeQuery();
@@ -42,6 +46,8 @@ public class SQL_Methods {
 			return 0;
 		}
 	}
+
+	// Method to get a product from an id.
 
 	public static Product getProductFromId(int id) throws SQLException {
 		PreparedStatement st = connection
@@ -63,6 +69,8 @@ public class SQL_Methods {
 			return null;
 	}
 
+	// Method to get a supplier from an id.
+
 	public static Supplier getSupplierFromId(int id) throws SQLException {
 		PreparedStatement st = connection
 				.prepareStatement("SELECT * from suppliers WHERE id = '" + String.valueOf(id) + "'");
@@ -81,10 +89,14 @@ public class SQL_Methods {
 
 	}
 
+	// Method to get every register from some table.
+
 	private static ResultSet selectFromTable(String tableName) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("SELECT * from " + tableName);
 		return st.executeQuery();
 	}
+
+	// Method to get every employees.
 
 	public static ArrayList<Employee> getEmployees() throws SQLException {
 		ResultSet rs = selectFromTable("employees");
@@ -102,6 +114,8 @@ public class SQL_Methods {
 		}
 		return employees;
 	}
+
+	// Method to get every products.
 
 	public static ArrayList<Product> getProducts() throws SQLException {
 		ResultSet rs = selectFromTable("products");
@@ -124,6 +138,8 @@ public class SQL_Methods {
 		return products;
 	}
 
+	// Method to get every suppliers.
+
 	public static ArrayList<Supplier> getSuppliers() throws SQLException {
 		ResultSet rs = selectFromTable("suppliers");
 		ArrayList<Supplier> suppliers = new ArrayList<>();
@@ -143,6 +159,8 @@ public class SQL_Methods {
 		return suppliers;
 	}
 
+	// Method to get every transactions.
+
 	public static ArrayList<Transaction> getTransactions() throws SQLException {
 		ResultSet rs = selectFromTable("transactions");
 		ArrayList<Transaction> transactions = new ArrayList<>();
@@ -159,6 +177,8 @@ public class SQL_Methods {
 		return transactions;
 	}
 
+	// Method to insert an employee.
+
 	public static void insertEmployee(Employee e) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("INSERT INTO employees VALUES (?,?,?,?,?,?)");
 
@@ -172,6 +192,8 @@ public class SQL_Methods {
 		st.executeUpdate();
 		st.close();
 	}
+
+	// Method to insert an product.
 
 	public static void insertProduct(Product p) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("INSERT INTO products VALUES (?,?,?,?,?,?,?,?)");
@@ -189,6 +211,8 @@ public class SQL_Methods {
 		st.close();
 	}
 
+	// Method to insert an supplier.
+
 	public static void insertSupplier(Supplier s) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("INSERT INTO suppliers VALUES (?,?,?,?,?)");
 
@@ -201,6 +225,8 @@ public class SQL_Methods {
 		st.executeUpdate();
 		st.close();
 	}
+
+	// Method to insert an transaction.
 
 	public static void insertTransaction(Transaction t, String option) throws SQLException {
 		if (option.equals("Sum")) {
@@ -230,6 +256,8 @@ public class SQL_Methods {
 		}
 	}
 
+	// Method to update a product.
+
 	public static void updateProduct(Product p) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("UPDATE products SET "
 				+ "quantity=?,price=?,name=?,description=?,category=?,image=?,deleted=?" + " WHERE id=?");
@@ -247,10 +275,14 @@ public class SQL_Methods {
 		st.close();
 	}
 
+	// Method to delete a product.
+
 	public static void deleteProduct(Product p) throws SQLException {
 		p.setDeleted(1);
 		updateProduct(p);
 	}
+
+	// Method to update a supplier.
 
 	public static void updateSupplier(Supplier s) throws SQLException {
 		PreparedStatement st = connection
@@ -266,10 +298,14 @@ public class SQL_Methods {
 		st.close();
 	}
 
+	// Method to delete a supplier.
+
 	public static void deleteSupplier(Supplier s) throws SQLException {
 		s.setDeleted(1);
 		updateSupplier(s);
 	}
+
+	// Method to filer products that contains one string.
 
 	public static ArrayList<Product> filterProducts(String parameter, String filter) throws SQLException {
 		PreparedStatement st = connection.prepareStatement(
@@ -294,6 +330,8 @@ public class SQL_Methods {
 		return products;
 
 	}
+
+	// Method to filter products ordered by price.
 
 	public static ArrayList<Product> filterProductsPrice(String filter) throws SQLException {
 		PreparedStatement st = connection.prepareStatement("SELECT * from products ORDER BY price " + filter);

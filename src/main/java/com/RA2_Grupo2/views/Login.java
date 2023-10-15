@@ -23,6 +23,8 @@ import com.RA2_Grupo2.objects.Employee;
 @SuppressWarnings("serial")
 public class Login extends JFrame {
 
+	// Attribute declaration.
+
 	private JLabel lUser, lPass;
 	public static JLabel lIncorrect;
 	private JTextField tUser;
@@ -31,11 +33,20 @@ public class Login extends JFrame {
 	private static ArrayList<Employee> listE = new ArrayList<Employee>();
 	public static String currentUser = "";
 
+	// Constructor.
+
 	public Login() {
 
 		super("Login");
+
+		// Frame configuration.
+
 		setSize(400, 300);
 		WindowsPreset.windowPreset(this);
+
+		// Labels & TextFields configuration.
+
+		// Email or NIF
 
 		lUser = new JLabel("Email / NIF: ");
 		lUser.setBounds(80, 50, 90, 25);
@@ -43,33 +54,35 @@ public class Login extends JFrame {
 		tUser.setBounds(200, 50, 150, 25);
 		tUser.setToolTipText("Enter email or NIF");
 
+		// Password
+
 		lPass = new JLabel("Password: ");
 		lPass.setBounds(80, 100, 90, 25);
 		tPass = new JPasswordField(10);
 		tPass.setBounds(200, 100, 150, 25);
 		tPass.setToolTipText("Enter Password");
 		tPass.addKeyListener(new KeyListener() {
-
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
 
 			}
+
+			// Method to login when enter is pressed.
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == 10) {
 					login();
 				}
-
 			}
 		});
+
+		// Label that will be show when user (email or NIF) and password don't match.
 
 		lIncorrect = new JLabel("USER OR PASSWORD WRONG");
 		lIncorrect.setBounds(80, 136, 270, 14);
@@ -80,12 +93,20 @@ public class Login extends JFrame {
 		getContentPane().setLayout(null);
 		getContentPane().add(lIncorrect);
 
+		// Buttons configuration.
+
+		// Handler.
+
 		bHandler handler = new bHandler();
+
+		// Button to Login.
 
 		bLogIn = new JButton();
 		bLogIn.setBounds(90, 160, 65, 65);
 		bLogIn.addActionListener(handler);
 		WindowsPreset.buttonPreset(bLogIn, "Log In", "src/main/resources/icons/signin.png");
+
+		// Button to Register an employee (user).
 
 		bSignUp = new JButton();
 		bSignUp.setBounds(236, 160, 65, 65);
@@ -102,6 +123,8 @@ public class Login extends JFrame {
 		setVisible(true);
 	}
 
+	// Getter and Setter for the employee list.
+
 	public static ArrayList<Employee> getListE() {
 		return listE;
 	}
@@ -110,13 +133,22 @@ public class Login extends JFrame {
 		Login.listE = listE;
 	}
 
+	// Handler implementation.
+
 	public class bHandler implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			// If press button login call method login.
+
 			if (e.getSource().equals(bLogIn)) {
 				login();
-			} else if (e.getSource().equals(bSignUp)) {
+			}
+
+			// If press button register open register view.
+
+			else if (e.getSource().equals(bSignUp)) {
 				@SuppressWarnings("unused")
 				Register r = new Register();
 				dispose();
@@ -124,6 +156,8 @@ public class Login extends JFrame {
 		}
 
 	}
+
+	// Method to check if the email or the NIF match with the password.
 
 	@SuppressWarnings("deprecation")
 	public void login() {

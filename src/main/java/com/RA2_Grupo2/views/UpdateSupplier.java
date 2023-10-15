@@ -34,7 +34,7 @@ public class UpdateSupplier extends JFrame {
 
 	public UpdateSupplier(Supplier supplier) {
 
-		// Windows Properties.
+		// Frame Properties.
 
 		super("Update");
 		setSize(400, 365);
@@ -85,6 +85,8 @@ public class UpdateSupplier extends JFrame {
 
 		// Button's configurations.
 
+		// Handler.
+
 		bHandler handler = new bHandler();
 
 		// Button to confirm the insertion.
@@ -108,29 +110,39 @@ public class UpdateSupplier extends JFrame {
 		setVisible(true);
 	}
 
+	// Handler implementation.
+
 	private class bHandler implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			/*
+			 * If confirm button is pressed check every field has been filled, update the
+			 * supply and refresh the table.
+			 */
+
 			if (e.getSource().equals(jbconfirm)) {
 				if (jtAddress.getText().isBlank() || jtName.getText().isBlank() || jtPhone.getText().isBlank()) {
 					JOptionPane.showMessageDialog(getContentPane(),
 							"You must fill every field to complete the data insertion. Try again.");
 				} else {
-					// Inserción de datos.
 					s.setName(jtName.getText());
 					s.setAddress(jtAddress.getText());
 					s.setPhone(jtPhone.getText());
 					try {
 						SQL_Methods.updateSupplier(s);
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					ProductAndSupplier.refreshTable();
 					dispose();
 				}
-			} else if (e.getSource().equals(jbcancel)) {
+			}
+
+			// If cancel button is pressed close the insertion view.
+
+			else if (e.getSource().equals(jbcancel)) {
 				dispose();
 			}
 		}

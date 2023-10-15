@@ -23,7 +23,7 @@ import com.RA2_Grupo2.objects.Product;
 @SuppressWarnings("serial")
 public class Inventory extends JFrame {
 
-	// Attributes.
+	// Attributes declaration.
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
@@ -32,8 +32,12 @@ public class Inventory extends JFrame {
 
 	private static List<Product> listP = new ArrayList<>();
 
+	// Constructor
+
 	public Inventory() {
 		super("Inventory");
+
+		// Frame configuration.
 
 		setSize(585, 575);
 		WindowsPreset.windowPreset(this);
@@ -74,6 +78,8 @@ public class Inventory extends JFrame {
 
 		// Buttons.
 
+		// Handler.
+
 		bHandler handler = new bHandler();
 
 		// Button for open Inventory.
@@ -111,6 +117,8 @@ public class Inventory extends JFrame {
 
 	}
 
+	// Getter & setter for the product list.
+
 	public static List<Product> getListP() {
 		return listP;
 	}
@@ -118,6 +126,8 @@ public class Inventory extends JFrame {
 	public static void setListT(List<Product> listP) {
 		Inventory.listP = listP;
 	}
+
+	// Method to load data into the table.
 
 	public static void refreshTable() {
 		DefaultTableModel dtm = new DefaultTableModel() {
@@ -146,18 +156,31 @@ public class Inventory extends JFrame {
 
 	}
 
+	// Handler implementation.
+
 	private class bHandler implements ActionListener {
 
 		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			// Open Product & Supplier view.
+
 			if (e.getSource().equals(bProductAndSupplier)) {
 				dispose();
 				ProductAndSupplier ps = new ProductAndSupplier();
-			} else if (e.getSource().equals(bTransaction)) {
+			}
+
+			// Open Transaction view.
+
+			else if (e.getSource().equals(bTransaction)) {
 				dispose();
 				TransactionHistory th = new TransactionHistory();
-			} else if (e.getSource().equals(bLogout)) {
+			}
+
+			// Go back to the login.
+
+			else if (e.getSource().equals(bLogout)) {
 				dispose();
 				Login l = new Login();
 			}

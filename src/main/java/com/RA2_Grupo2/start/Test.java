@@ -7,8 +7,12 @@ public class Test {
 
 	public static void main(String[] args) {
 
+		// Checking if the program make connection with the database successfully.
+
 		if (SQL_Methods.startConnection()) {
+
 			// Open the user interface
+
 			@SuppressWarnings("unused")
 			Login l = new Login();
 		}

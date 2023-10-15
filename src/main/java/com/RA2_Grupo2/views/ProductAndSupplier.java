@@ -32,7 +32,7 @@ import com.RA2_Grupo2.objects.Supplier;
 @SuppressWarnings("serial")
 public class ProductAndSupplier extends JFrame {
 
-	// Attributes.
+	// Attributes declaration.
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
@@ -52,7 +52,7 @@ public class ProductAndSupplier extends JFrame {
 
 	public ProductAndSupplier() {
 
-		// Windows Properties.
+		// Frame Properties.
 
 		super("Products & Supplier");
 		setSize(720, 555);
@@ -106,9 +106,9 @@ public class ProductAndSupplier extends JFrame {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-
 			}
+
+			// Method to filter the products by the entered letters.
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -127,12 +127,13 @@ public class ProductAndSupplier extends JFrame {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-
 			}
 		});
 		getContentPane().add(tFilter);
 
 		// Buttons.
+
+		// Handler.
 
 		bHandler handler = new bHandler();
 

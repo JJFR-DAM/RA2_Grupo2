@@ -44,7 +44,7 @@ public class UpdateProduct2 extends JFrame {
 
 	public UpdateProduct2(Product p) {
 
-		// Windows Properties.
+		// Frame Properties.
 
 		super("Update");
 		setSize(400, 455);
@@ -114,6 +114,8 @@ public class UpdateProduct2 extends JFrame {
 
 		// Button's configurations.
 
+		// Handler
+
 		bHandler handler = new bHandler();
 
 		// Button to select the image.
@@ -145,6 +147,8 @@ public class UpdateProduct2 extends JFrame {
 
 		setVisible(true);
 	}
+
+	// Handler implementation.
 
 	private class bHandler implements ActionListener {
 
@@ -199,7 +203,14 @@ public class UpdateProduct2 extends JFrame {
 					jfc.setVisible(false);
 
 				}
-			} else if (e.getSource().equals(jbconfirm)) {
+			}
+
+			/*
+			 * If the confirm button is pressed, check null values, format exception and do
+			 * the update.
+			 */
+
+			else if (e.getSource().equals(jbconfirm)) {
 				if (jtDescription.getText().isBlank() || jtName.getText().isBlank() || jtCat.getText().isBlank()
 						|| jtPrice.getText().isBlank()) {
 					JOptionPane.showMessageDialog(getContentPane(),
@@ -224,7 +235,11 @@ public class UpdateProduct2 extends JFrame {
 						e1.printStackTrace();
 					}
 				}
-			} else if (e.getSource().equals(jbcancel)) {
+			}
+
+			// If cancel button is pressed close the insertion view.
+
+			else if (e.getSource().equals(jbcancel)) {
 				dispose();
 			}
 		}

@@ -20,17 +20,25 @@ import com.RA2_Grupo2.objects.Employee;
 @SuppressWarnings("serial")
 public class Register extends JFrame {
 
+	// Attributes declaration.
+
 	private JLabel lPass, lPass2, lName, lSurname, lNIF, lEmail;
 	private JTextField tName, tSurname, tNIF, tEmail;
 	private JPasswordField tPass, tPass2;
 	private JButton bBack, bRegister;
 
+	// Constructor.
+
 	public Register() {
 
 		super("Sign up");
 
+		// View configuration.
+
 		setSize(400, 500);
 		WindowsPreset.windowPreset(this);
+
+		// Labels & TextFields configurations.
 
 		lEmail = new JLabel("Email: ");
 		lEmail.setBounds(80, 50, 120, 25);
@@ -68,12 +76,20 @@ public class Register extends JFrame {
 		tNIF.setBounds(200, 300, 150, 25);
 		tNIF.setToolTipText("Enter NIF");
 
+		// Buttons configuration.
+
+		// Handler
+
 		bHandler handler = new bHandler();
+
+		// Button to go back to the login being cancelled the register.
 
 		bBack = new JButton();
 		bBack.setBounds(90, 360, 65, 65);
 		WindowsPreset.buttonPreset(bBack, "Sign In", "src/main/resources/icons/volver.png");
 		bBack.addActionListener(handler);
+
+		// Button to insert the employee and control the exceptions.
 
 		bRegister = new JButton();
 		bRegister.setBounds(245, 360, 65, 65);
@@ -98,6 +114,8 @@ public class Register extends JFrame {
 		setVisible(true);
 
 	}
+
+	// Handler implementation.
 
 	public class bHandler implements ActionListener {
 		@SuppressWarnings({ "unused", "deprecation" })

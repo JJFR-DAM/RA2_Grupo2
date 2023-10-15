@@ -34,8 +34,12 @@ public class TransactionHistory extends JFrame {
 
 	private static List<Transaction> listT = new ArrayList<>();
 
+	// Constructor.
+
 	public TransactionHistory() {
 		super("Transactions");
+
+		// Frame properties.
 
 		setSize(585, 575);
 		WindowsPreset.windowPreset(this);
@@ -76,6 +80,8 @@ public class TransactionHistory extends JFrame {
 
 		// Buttons.
 
+		// Handler.
+
 		bHandler handler = new bHandler();
 
 		// Button for create.
@@ -111,6 +117,8 @@ public class TransactionHistory extends JFrame {
 
 	}
 
+	// Getter & Setter for the transaction list.
+
 	public static List<Transaction> getListT() {
 		return listT;
 	}
@@ -118,6 +126,8 @@ public class TransactionHistory extends JFrame {
 	public static void setListT(List<Transaction> listT) {
 		TransactionHistory.listT = listT;
 	}
+
+	// Method to load data into the table.
 
 	public static void refreshTable() {
 		DefaultTableModel dtm = new DefaultTableModel() {
@@ -146,21 +156,37 @@ public class TransactionHistory extends JFrame {
 
 	}
 
+	// Handler implementation.
+
 	private class bHandler implements ActionListener {
 
 		@SuppressWarnings("unused")
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String option;
+
+			// If sum button is pressed open the transaction view with the sum option.
+
 			if (e.getSource().equals(bSum)) {
 				option = "Sum";
 				InsertTransaction st = new InsertTransaction(option);
 
-			} else if (e.getSource().equals(bSubtract)) {
+			}
+
+			/*
+			 * If subtract button is pressed open the transaction view with the subtract
+			 * option.
+			 */
+
+			else if (e.getSource().equals(bSubtract)) {
 				option = "Subtract";
 				InsertTransaction st = new InsertTransaction(option);
 
-			} else if (e.getSource().equals(bBack)) {
+			}
+
+			// If cancel button is pressed go back to inventory view.
+
+			else if (e.getSource().equals(bBack)) {
 				dispose();
 				Inventory i = new Inventory();
 			}

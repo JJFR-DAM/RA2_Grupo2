@@ -33,7 +33,7 @@ public class InsertSupplier extends JFrame {
 
 	public InsertSupplier() {
 
-		// Windows Properties.
+		// Frame Properties.
 
 		super("Insert");
 		setSize(400, 365);
@@ -80,6 +80,8 @@ public class InsertSupplier extends JFrame {
 
 		// Button's configurations.
 
+		// Handler.
+
 		bHandler handler = new bHandler();
 
 		// Button to confirm the insertion.
@@ -103,10 +105,18 @@ public class InsertSupplier extends JFrame {
 		setVisible(true);
 	}
 
+	// Handler implementation.
+
 	private class bHandler implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			/*
+			 * If confirm button is pressed check every field has been field, insert the
+			 * supply and refresh the table.
+			 */
+
 			if (e.getSource().equals(jbconfirm)) {
 				if (jtAddress.getText().isBlank() || jtName.getText().isBlank() || jtPhone.getText().isBlank()) {
 					JOptionPane.showMessageDialog(getContentPane(),
@@ -124,7 +134,11 @@ public class InsertSupplier extends JFrame {
 					ProductAndSupplier.refreshTable();
 					dispose();
 				}
-			} else if (e.getSource().equals(jbcancel)) {
+			}
+
+			// If cancel button is pressed close the insertion view.
+
+			else if (e.getSource().equals(jbcancel)) {
 				dispose();
 			}
 		}

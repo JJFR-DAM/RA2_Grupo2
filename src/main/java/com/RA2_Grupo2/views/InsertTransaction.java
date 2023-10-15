@@ -39,8 +39,9 @@ public class InsertTransaction extends JFrame {
 
 	public InsertTransaction(String o) {
 
-		// Windows Properties.
 		super(o);
+
+		// Frame Properties.
 
 		setSize(400, 320);
 		WindowsPreset.windowPreset(this);
@@ -99,6 +100,8 @@ public class InsertTransaction extends JFrame {
 
 		// Button's configurations.
 
+		// Handler.
+
 		bHandler handler = new bHandler();
 
 		// Button to confirm the insertion.
@@ -122,12 +125,23 @@ public class InsertTransaction extends JFrame {
 		setVisible(true);
 	}
 
+	// Handler implementation.
+
 	private class bHandler implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			// If confirm button is pressed proceed to insert a transaction
+
 			if (e.getSource().equals(jbconfirm)) {
+
+				// Checking the quantity isn't equal zero
+
 				if (Integer.valueOf(jtQuantity.getText()) != 0) {
+
+					// Checking from which option come the view and insert the transaction.
+
 					if (option == "Sum") {
 						try {
 							Transaction t = new Transaction();
@@ -150,6 +164,9 @@ public class InsertTransaction extends JFrame {
 						try {
 							Transaction t = new Transaction();
 							Product p = products.get(jcProduct.getSelectedIndex());
+
+							// Checking the quantity is more than the number to subtract.
+
 							if (p.getQuantity() >= Integer.valueOf(jtQuantity.getText())) {
 								t.setId(SQL_Methods.getMaxIdFromTable("transactions") + 1);
 								t.setProductId(p.getId());
@@ -160,18 +177,34 @@ public class InsertTransaction extends JFrame {
 								SQL_Methods.updateProduct(p);
 								TransactionHistory.refreshTable();
 								dispose();
-							} else {
+							}
+
+							// If the subtraction is bigger than the quantity
+
+							else {
 								JOptionPane.showMessageDialog(null, "You can't sell more than you have.");
 							}
 						} catch (SQLException sql) {
-						} catch (NumberFormatException NFE) {
+						}
+
+						// If the format isn't correct show the message.
+
+						catch (NumberFormatException NFE) {
 							JOptionPane.showMessageDialog(null, "You are trying to use wrong format for quantity.");
 						}
 					}
-				} else
+				}
+
+				// If the subtraction equals zero.
+
+				else
 					JOptionPane.showMessageDialog(null, "You can't operate with zero products");
 
-			} else if (e.getSource().equals(jbcancel)) {
+			}
+
+			// If cancel button is pressed close the insertion view.
+
+			else if (e.getSource().equals(jbcancel)) {
 				dispose();
 			}
 		}
