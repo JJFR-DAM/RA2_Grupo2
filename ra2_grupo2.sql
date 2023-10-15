@@ -67,14 +67,14 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `quantity`, `price`, `name`, `description`, `category`, `image`, `deleted`) VALUES
-(0, 90, 2.5, 'Nueces', 'fruto con cáscara leñosa y dura,\nque al partirlo por la mitad presenta\nuna pulpa seca de color marrón\namarillento y con forma de cerebro', 'Frutos secos', 'src/main/resources/defaultImages/default.png', 0),
-(1, 80, 1.5, 'Almendra', 'Fruto de cáscara un tanto dura y\nquebradiza de color marrón-beige,\ncuya semilla es la parte comestible.', 'Frutos secos', 'src/main/resources/images/Almendra_1231697063984566.jpg', 0),
-(2, 45, 2.89, 'Cocacola', 'Bebida azucarada gaseosa vendida\na nivel mundial en tiendas,\nrestaurantes y máquinas\nexpendedoras en más de\ndoscientos países o territorios.', 'Refrescos', 'src/main/resources/images/Cocacola_1231697388965749.jpg', 0),
-(3, 45, 1.34, 'Fanta', 'Bebida azucarada gaseosa\nvendida a nivel mundial en\ntiendas, restaurantes y máquinas\nexpendedoras en más de\ndoscientos países o territorios.', 'Refrescos', 'src/main/resources/images/Fanta_1231697389063953.jpg', 0),
-(4, 67, 4.5, 'Pizza', 'Especie de torta de harina\namasada, encima de la cual se\npone queso, tomate frito y otros\ningredientes, y que se cuece en\nel horno.', 'Preparados', 'src/main/resources/images/Pizza_1231697389243832.jpg', 0),
-(5, 67, 2.5, 'Tortilla', 'Alimento preparado con huevo\nbatido, cuajado con aceite en la\nsartén y de forma redonda o\nalargada, al que a veces se\nañaden otros ingredientes.', 'Preparados', 'src/main/resources/images/Tortilla_1231697389365546.jpg', 0),
-(6, 180, 1.34, 'Pasta de dientes', 'Es una sustancia química que,\ncomo hemos dicho, es una de las\npartes indispensables de la higiene\ndental diaria.', 'Higiene', 'src/main/resources/images/Pasta_de_dientes_1231697389445226.jpg', 0),
-(7, 180, 2.45, 'Cepillo de dientes', 'Es un instrumento de higiene oral\nque se utiliza para limpiar la boca a\ntravés del cepillado.', 'Higiene', 'src/main/resources/images/Cepillo_de_dientes_1231697389547792.jpg', 0);
+(0, 90, 2.5, 'Nueces', 'fruto con cáscara leñosa y dura,\nque al partirlo por la mitad presenta\nuna pulpa seca de color marrón\namarillento y con forma de cerebro', 'Frutos secos', 'src/main/resources/defaultImages/almendra.jpg', 0),
+(1, 80, 1.5, 'Almendra', 'Fruto de cáscara un tanto dura y\nquebradiza de color marrón-beige,\ncuya semilla es la parte comestible.', 'Frutos secos', 'src/main/resources/defaultImages/nuez.jpg', 0),
+(2, 45, 2.89, 'Cocacola', 'Bebida azucarada gaseosa vendida\na nivel mundial en tiendas,\nrestaurantes y máquinas\nexpendedoras en más de\ndoscientos países o territorios.', 'Refrescos', 'src/main/resources/defaultImages/cocacola.png', 0),
+(3, 45, 1.34, 'Fanta', 'Bebida azucarada gaseosa\nvendida a nivel mundial en\ntiendas, restaurantes y máquinas\nexpendedoras en más de\ndoscientos países o territorios.', 'Refrescos', 'src/main/resources/defaultImages/fanta.jpg', 0),
+(4, 67, 4.5, 'Pizza', 'Especie de torta de harina\namasada, encima de la cual se\npone queso, tomate frito y otros\ningredientes, y que se cuece en\nel horno.', 'Preparados', 'src/main/resources/defaultImages/pizza.png', 0),
+(5, 67, 2.5, 'Tortilla', 'Alimento preparado con huevo\nbatido, cuajado con aceite en la\nsartén y de forma redonda o\nalargada, al que a veces se\nañaden otros ingredientes.', 'Preparados', 'src/main/resources/defaultImages/tortilla.png', 0),
+(6, 180, 1.34, 'Pasta de dientes', 'Es una sustancia química que,\ncomo hemos dicho, es una de las\npartes indispensables de la higiene\ndental diaria.', 'Higiene', 'src/main/resources/defaultImages/pasta_dientes.png', 0),
+(7, 180, 2.45, 'Cepillo de dientes', 'Es un instrumento de higiene oral\nque se utiliza para limpiar la boca a\ntravés del cepillado.', 'Higiene', 'src/main/resources/defaultImages/cepillo_dientes.jpg', 0);
 
 -- --------------------------------------------------------
 
