@@ -3,6 +3,8 @@ package com.RA2_Grupo2.views;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -97,6 +99,97 @@ public class InsertTransaction extends JFrame {
 		jtQuantity.setColumns(10);
 		jtQuantity.setToolTipText("Insert quantity");
 		getContentPane().add(jtQuantity);
+		jtQuantity.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				// If enter key is pressed proceed to insert a transaction
+
+				if (e.getKeyCode() == 10) {
+
+					// Checking the quantity isn't equal zero
+
+					try {
+						if (Integer.valueOf(jtQuantity.getText()) != 0) {
+
+							// Checking from which option come the view and insert the transaction.
+
+							if (option == "Sum") {
+								try {
+									Transaction t = new Transaction();
+									Product p = products.get(jcProduct.getSelectedIndex());
+									t.setId(SQL_Methods.getMaxIdFromTable("transactions") + 1);
+									t.setProductId(p.getId());
+									t.setSupplierId(suppliers.get(jcSupplier.getSelectedIndex()).getId());
+									t.setQuantity(Integer.valueOf(jtQuantity.getText()));
+									SQL_Methods.insertTransaction(t, option);
+									p.setQuantity(p.getQuantity() + Integer.valueOf(jtQuantity.getText()));
+									SQL_Methods.updateProduct(p);
+
+									TransactionHistory.refreshTable();
+									dispose();
+								} catch (SQLException sql) {
+								} catch (NumberFormatException NFE) {
+									JOptionPane.showMessageDialog(null,
+											"You are trying to use wrong format for quantity.");
+								}
+							} else if (option == "Subtract") {
+								try {
+									Transaction t = new Transaction();
+									Product p = products.get(jcProduct.getSelectedIndex());
+
+									// Checking the quantity is more than the number to subtract.
+
+									if (p.getQuantity() >= Integer.valueOf(jtQuantity.getText())) {
+										t.setId(SQL_Methods.getMaxIdFromTable("transactions") + 1);
+										t.setProductId(p.getId());
+										t.setSupplierId(suppliers.get(jcSupplier.getSelectedIndex()).getId());
+										t.setQuantity(Integer.valueOf(jtQuantity.getText()));
+										SQL_Methods.insertTransaction(t, option);
+										p.setQuantity(p.getQuantity() - Integer.valueOf(jtQuantity.getText()));
+										SQL_Methods.updateProduct(p);
+										TransactionHistory.refreshTable();
+										dispose();
+									}
+
+									// If the subtraction is bigger than the quantity
+
+									else {
+										JOptionPane.showMessageDialog(null, "You can't sell more than you have.");
+									}
+								} catch (SQLException sql) {
+								}
+
+								// If the format isn't correct show the message.
+
+								catch (NumberFormatException NFE) {
+									JOptionPane.showMessageDialog(null,
+											"You are trying to use wrong format for quantity.");
+								}
+							}
+						}
+
+						// If the subtraction equals zero.
+
+						else
+							JOptionPane.showMessageDialog(null, "You can't operate with zero products");
+					} catch (NumberFormatException NFE) {
+						JOptionPane.showMessageDialog(null, "You are trying to use wrong format for quantity.");
+					}
+				}
+			}
+		});
 
 		// Button's configurations.
 

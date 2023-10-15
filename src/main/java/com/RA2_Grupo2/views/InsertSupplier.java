@@ -3,6 +3,8 @@ package com.RA2_Grupo2.views;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -75,8 +77,48 @@ public class InsertSupplier extends JFrame {
 		jtAddress.setToolTipText("Insert address");
 		jsAddress = new JScrollPane(jtAddress);
 		jsAddress.setBounds(185, 130, 193, 70);
-		;
 		getContentPane().add(jsAddress);
+
+		jtAddress.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				/*
+				 * If enter key is pressed check every field has been field, insert the supply
+				 * and refresh the table.
+				 */
+
+				if (e.getKeyCode() == 10) {
+					if (jtAddress.getText().isBlank() || jtName.getText().isBlank() || jtPhone.getText().isBlank()) {
+						JOptionPane.showMessageDialog(getContentPane(),
+								"You must fill every field to complete the data insertion. Try again.");
+					} else {
+						int id = 0;
+						try {
+							id = SQL_Methods.getMaxIdFromTable("suppliers");
+							Supplier s = new Supplier(jtName.getText(), jtAddress.getText(), jtPhone.getText());
+							s.setId(id + 1);
+							SQL_Methods.insertSupplier(s);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+						ProductAndSupplier.refreshTable();
+						dispose();
+					}
+				}
+			}
+		});
 
 		// Button's configurations.
 

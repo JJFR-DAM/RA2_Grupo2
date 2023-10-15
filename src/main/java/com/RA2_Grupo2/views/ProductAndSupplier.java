@@ -247,6 +247,7 @@ public class ProductAndSupplier extends JFrame {
 	public static void refreshTable() {
 		if (option == 0) {
 			try {
+				listP = SQL_Methods.getProducts();
 				setProductTable(SQL_Methods.getProducts());
 			} catch (SQLException e) {
 			}
@@ -288,7 +289,7 @@ public class ProductAndSupplier extends JFrame {
 
 			if (e.getSource().equals(bInsert)) {
 				if (option == 0) {
-					InsertProduct2 ip = new InsertProduct2();
+					InsertProduct ip = new InsertProduct();
 				} else {
 					InsertSupplier is = new InsertSupplier();
 				}
@@ -347,7 +348,7 @@ public class ProductAndSupplier extends JFrame {
 				int option = table.getSelectedRow();
 				if (option >= 0) {
 					if (ProductAndSupplier.option == 0) {
-						UpdateProduct2 up = new UpdateProduct2(listP.get(option));
+						UpdateProduct up = new UpdateProduct(listP.get(option));
 					} else {
 						UpdateSupplier us = new UpdateSupplier(listS.get(option));
 					}

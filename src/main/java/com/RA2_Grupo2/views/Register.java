@@ -1,7 +1,10 @@
 package com.RA2_Grupo2.views;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,6 +78,113 @@ public class Register extends JFrame {
 		tNIF = new JTextField(10);
 		tNIF.setBounds(200, 300, 150, 25);
 		tNIF.setToolTipText("Enter NIF");
+		tNIF.addKeyListener(new KeyListener() {
+
+			// Pattern to verify email.
+
+			String regexEmail = "^(.+)@(.+)$";
+			Pattern patternEmail = Pattern.compile(regexEmail);
+			Matcher matcherEmail = patternEmail.matcher(tEmail.getText());
+			boolean bEmail = matcherEmail.matches();
+
+			// Pattern to verify NIF.
+
+			String regexNIF = "^[0-9]{8}[A-Z a-z]";
+			Pattern patternNIF = Pattern.compile(regexNIF);
+			Matcher matcherNIF = patternNIF.matcher(tNIF.getText());
+			boolean bNIF = matcherNIF.matches();
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+			@SuppressWarnings({ "deprecation", "unused" })
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == 10) {
+
+					// If some field is blank.
+
+					if (tEmail.getText().isBlank() || tName.getText().isBlank() || tNIF.getText().isBlank()
+							|| tSurname.getText().isBlank() || tPass.getText().isBlank()
+							|| tPass2.getPassword().toString().isBlank()) {
+						JOptionPane.showMessageDialog(getContentPane(),
+								"You must fill every field to complete the data insertion. Try again.");
+					}
+
+					// If the email is valid.
+
+					else if (bEmail) {
+
+						// If passwords match.
+
+						if (tPass.getText().equals(tPass2.getText())) {
+
+							// If password doesn't have six or more characters.
+
+							if (tPass.getText().length() >= 6) {
+
+								// If NIF is valid.
+
+								if (bNIF) {
+
+									// Create employee.
+
+									Employee em = new Employee(tNIF.getText().toUpperCase(), tName.getText(),
+											tSurname.getText(), tEmail.getText(), tPass.getText());
+									int id = 0;
+									try {
+										id = SQL_Methods.getMaxIdFromTable("employees");
+									} catch (SQLException e1) {
+										e1.printStackTrace();
+									}
+									em.setId(id + 1);
+
+									// Method to insert Employee. Falta poner el id.
+
+									try {
+										SQL_Methods.insertEmployee(em);
+									} catch (SQLException e1) {
+										e1.printStackTrace();
+									}
+
+									dispose();
+									Login l = new Login();
+								}
+
+								// If NIF isn't valid.
+
+								else {
+									JOptionPane.showMessageDialog(getContentPane(), "The NIF isn't valid. Try again.");
+								}
+
+							} else
+								JOptionPane.showMessageDialog(getContentPane(),
+										"The password need more characters. Try again.");
+						}
+
+						// If passwords don't match.
+
+						else {
+							JOptionPane.showMessageDialog(getContentPane(), "The passwords don't match. Try again.");
+						}
+					}
+
+					// If the email isn't valid.
+
+					else if (!bEmail) {
+						JOptionPane.showMessageDialog(getContentPane(), "The email isn't valid. Try again.");
+					}
+
+				}
+			}
+		});
 
 		// Buttons configuration.
 
@@ -87,6 +197,7 @@ public class Register extends JFrame {
 		bBack = new JButton();
 		bBack.setBounds(90, 360, 65, 65);
 		WindowsPreset.buttonPreset(bBack, "Sign In", "src/main/resources/icons/volver.png");
+		bBack.setBackground(new Color(166, 89, 89));
 		bBack.addActionListener(handler);
 
 		// Button to insert the employee and control the exceptions.
@@ -94,6 +205,7 @@ public class Register extends JFrame {
 		bRegister = new JButton();
 		bRegister.setBounds(245, 360, 65, 65);
 		WindowsPreset.buttonPreset(bRegister, "Sign up", "src/main/resources/icons/confirmar.png");
+		bRegister.setBackground(new Color(89, 166, 89));
 		bRegister.addActionListener(handler);
 
 		getContentPane().add(lPass);
@@ -194,7 +306,7 @@ public class Register extends JFrame {
 								}
 
 								dispose();
-								Login lv = new Login();
+								Login l = new Login();
 							}
 
 							// If NIF isn't valid.

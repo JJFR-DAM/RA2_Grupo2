@@ -1,16 +1,26 @@
 package com.RA2_Grupo2.views;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
@@ -19,140 +29,219 @@ import com.RA2_Grupo2.objects.Product;
 @SuppressWarnings("serial")
 public class UpdateProduct extends JFrame {
 
-	private JTextField name, description, image, price;
-	@SuppressWarnings("rawtypes")
-	private JComboBox category;
-	private JSpinner quantity;
-	private JButton updateButton;
-	private JButton backButton;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JButton btnNewButton;
-	private JLabel lblNewLabel_3;
-	private JLabel lblNewLabel_4;
-	private JLabel lblNewLabel_5;
+	// Attributes declaration.
+
+	private JLabel jlName, jlDescription, jlCat, jlPrice, jlImg;
+	private JTextField jtName, jtCat, jtPrice;
+	private JTextArea jtDescription;
+	private JScrollPane jsDescription;
+	private JButton jbselector, jbconfirm, jbcancel;
+	private Product product;
+
+	public static String url = "src/main/resources/defaultImages/default.png";
+
+	// Constructor.
 
 	public UpdateProduct(Product p) {
-		setTitle("EDITAR PRODUCTO");
-		setSize(519, 340);
+
+		// Frame Properties.
+
+		super("Update");
+		setSize(400, 455);
 		WindowsPreset.windowPreset(this);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 
-		name = new JTextField();
-		name.setEditable(true);
-		name.setBounds(33, 55, 163, 36);
-		name.setColumns(10);
-		name.setText(p.getName());
-		getContentPane().add(name);
+		product = p;
 
-		description = new JTextField();
-		description.setEditable(true);
-		description.setBounds(229, 55, 163, 55);
-		description.setColumns(10);
-		description.setText(p.getDescription());
-		getContentPane().add(description);
+		// Label's & TextField's configurations.
 
-		category.setBounds(33, 150, 163, 38);
-		getContentPane().add(category);
+		jlName = new JLabel("Name:");
+		jlName.setBounds(10, 40, 175, 35);
+		jlName.setHorizontalAlignment(SwingConstants.CENTER);
+		jlName.setBackground(Color.GRAY);
+		getContentPane().add(jlName);
+		jtName = new JTextField();
+		jtName.setBounds(185, 40, 193, 35);
+		jtName.setColumns(10);
+		jtName.setToolTipText("Insert name");
+		jtName.setText(product.getName());
+		getContentPane().add(jtName);
 
-		image = new JTextField();
-		image.setEditable(true);
-		image.setBounds(229, 152, 163, 36);
-		image.setColumns(10);
-		image.setText(p.getImage());
-		getContentPane().add(image);
+		jlCat = new JLabel("Category:");
+		jlCat.setBounds(10, 85, 175, 35);
+		jlCat.setHorizontalAlignment(SwingConstants.CENTER);
+		jlCat.setBackground(Color.GRAY);
+		getContentPane().add(jlCat);
+		jtCat = new JTextField();
+		jtCat.setBounds(185, 85, 193, 35);
+		jtCat.setColumns(10);
+		jtCat.setToolTipText("Insert category");
+		jtCat.setText(product.getCategory());
+		getContentPane().add(jtCat);
 
-		price = new JTextField();
-		price.setEditable(true);
-		price.setBounds(33, 234, 163, 36);
-		price.setColumns(10);
-		price.setText(Float.toString(p.getPrice()));
-		getContentPane().add(price);
+		jlPrice = new JLabel("Price:");
+		jlPrice.setBounds(10, 130, 175, 35);
+		jlPrice.setHorizontalAlignment(SwingConstants.CENTER);
+		jlPrice.setBackground(Color.GRAY);
+		getContentPane().add(jlPrice);
+		jtPrice = new JTextField();
+		jtPrice.setBounds(185, 130, 193, 35);
+		jtPrice.setColumns(10);
+		jtPrice.setHorizontalAlignment(SwingConstants.CENTER);
+		jtPrice.setToolTipText("Insert price");
+		jtPrice.setText(String.valueOf(product.getPrice()));
+		getContentPane().add(jtPrice);
 
-		quantity.setBounds(229, 234, 52, 36);
-		getContentPane().add(quantity);
+		jlDescription = new JLabel("Description:");
+		jlDescription.setBounds(10, 192, 175, 35);
+		jlDescription.setHorizontalAlignment(SwingConstants.CENTER);
+		jlDescription.setBackground(Color.GRAY);
+		getContentPane().add(jlDescription);
+		jtDescription = new JTextArea();
+		jtDescription.setColumns(10);
+		jtDescription.setToolTipText("Insert description");
+		jtDescription.setText(product.getDescription());
+		jsDescription = new JScrollPane(jtDescription);
+		jsDescription.setBounds(185, 175, 193, 70);
+		getContentPane().add(jsDescription);
 
-		updateButton = new JButton("EDITAR PRODUCTO");
-		updateButton.setBounds(324, 222, 160, 53);
-		updateButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				p.setName(name.toString());
-				p.setDescription(description.toString());
-				p.setImage("test");
-				p.setCategory("test");
-				p.setPrice(Float.parseFloat(price.toString()));
-				p.setQuantity(Integer.parseInt(quantity.toString()));
-				updateProduct(p);
-			}
-		});
-		getContentPane().add(updateButton);
+		jlImg = new JLabel("Image:");
+		jlImg.setBounds(10, 255, 175, 35);
+		jlImg.setHorizontalAlignment(SwingConstants.CENTER);
+		jlImg.setBackground(Color.GRAY);
+		getContentPane().add(jlImg);
 
-		backButton = new JButton("VOLVER");
-		backButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				@SuppressWarnings("unused")
-				ProductAndSupplier m = new ProductAndSupplier();
-				dispose();
-			}
-		});
-		backButton.setBounds(410, 10, 85, 21);
-		getContentPane().add(backButton);
+		// Button's configurations.
 
-		lblNewLabel = new JLabel("NOMBRE");
-		lblNewLabel.setBounds(34, 41, 79, 13);
-		getContentPane().add(lblNewLabel);
+		// Handler
 
-		lblNewLabel_1 = new JLabel("DECRIPCIÓN");
-		lblNewLabel_1.setBounds(229, 41, 85, 13);
-		getContentPane().add(lblNewLabel_1);
+		bHandler handler = new bHandler();
 
-		lblNewLabel_2 = new JLabel("CATEGORÍA");
-		lblNewLabel_2.setBounds(33, 134, 99, 13);
-		getContentPane().add(lblNewLabel_2);
+		// Button to select the image.
 
-		btnNewButton = new JButton("...");
-		btnNewButton.setToolTipText("Seleccionar imagen");
-		btnNewButton.setBounds(402, 159, 52, 21);
-		getContentPane().add(btnNewButton);
+		jbselector = new JButton("Select Image");
+		jbselector.setToolTipText("Open JFileChooser");
+		jbselector.setBounds(185, 255, 193, 35);
+		jbselector.setBackground(Color.LIGHT_GRAY);
+		getContentPane().add(jbselector);
+		jbselector.addActionListener(handler);
 
-		lblNewLabel_3 = new JLabel("PRECIO");
-		lblNewLabel_3.setBounds(33, 222, 45, 13);
-		getContentPane().add(lblNewLabel_3);
+		// Button to confirm the insertion.
 
-		lblNewLabel_4 = new JLabel("IMAGEN");
-		lblNewLabel_4.setBounds(229, 134, 45, 13);
-		getContentPane().add(lblNewLabel_4);
+		jbconfirm = new JButton();
+		jbconfirm.setBounds(235, 320, 65, 65);
+		WindowsPreset.buttonPreset(jbconfirm, "Insert the product", "src/main/resources/icons/confirmar.png");
+		jbconfirm.setBackground(new Color(89, 166, 89));
+		jbconfirm.addActionListener(handler);
+		getContentPane().add(jbconfirm);
 
-		lblNewLabel_5 = new JLabel("CANTIDAD");
-		lblNewLabel_5.setBounds(229, 222, 85, 13);
-		getContentPane().add(lblNewLabel_5);
+		// Button to cancel the insertion.
+
+		jbcancel = new JButton();
+		jbcancel.setBounds(100, 320, 65, 65);
+		WindowsPreset.buttonPreset(jbcancel, "Cancel", "src/main/resources/icons/volver.png");
+		jbcancel.setBackground(new Color(166, 89, 89));
+		jbcancel.addActionListener(handler);
+		getContentPane().add(jbcancel);
 
 		setVisible(true);
 	}
 
-	public void updateProduct(Product p) {
+	// Handler implementation.
 
-		if (p.getName().equals("") || p.getDescription().equals("") || p.getCategory().equals("")
-				|| p.getImage().equals("")) {
-			JOptionPane.showMessageDialog(null,
-					"Para editar un producto de la base de datos debe rellenar todos los datos", "",
-					JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			int res = JOptionPane.showConfirmDialog(null, "¿Está seguro de querer editar el producto?",
-					"EDITAR PRODUCTO", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (res == 0) {
-				try {
-					SQL_Methods.updateProduct(p);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+	private class bHandler implements ActionListener {
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(jbselector)) {
+
+				/*
+				 * Configuration of the selector, creation of the image and adding it to the
+				 * entity and local files.
+				 */
+
+				JFileChooser jfc = new JFileChooser();
+				jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG & GIF Images", "jpg", "gif",
+						"png");
+				jfc.setFileFilter(filter);
+				int selection = jfc.showOpenDialog(null);
+
+				// Deletion of the image that the video game had before.
+
+				if (!product.getImage().split("/")[3].equals("defaulImages")) {
+					new File(product.getImage()).delete();
 				}
-			} else
-				JOptionPane.showMessageDialog(null, "Se ha cancelado la operación para editar producto.",
-						"EDITAR PRODUCTO CANCELADO", JOptionPane.INFORMATION_MESSAGE);
+
+				File img1 = jfc.getSelectedFile();
+				getContentPane().add(jfc);
+				jfc.setVisible(true);
+
+				/*
+				 * When the JFileChooser select an image, the program create it with an non
+				 * repeatable absolute path.
+				 */
+
+				if (JFileChooser.APPROVE_OPTION == selection) {
+					Date d = new Date();
+					url = "src/main/resources/images/" + jtName.getText().replace(" ", "_") + "_" + d.getYear()
+							+ d.getTime() + ".jpg";
+					Path p = Path.of(url).toAbsolutePath();
+					try {
+						Files.copy(img1.toPath(), p, StandardCopyOption.REPLACE_EXISTING);
+					} catch (IOException IOE) {
+						IOE.printStackTrace();
+					}
+					jfc.setVisible(false);
+
+					// If selector is canceled, the program load a default image.
+
+				} else if (JFileChooser.CANCEL_OPTION == selection) {
+					url = "src/main/resources/defaultImages/default.png";
+					jfc.setVisible(false);
+
+				}
+			}
+
+			/*
+			 * If the confirm button is pressed, check null values, format exception and do
+			 * the update.
+			 */
+
+			else if (e.getSource().equals(jbconfirm)) {
+				if (jtDescription.getText().isBlank() || jtName.getText().isBlank() || jtCat.getText().isBlank()
+						|| jtPrice.getText().isBlank()) {
+					JOptionPane.showMessageDialog(getContentPane(),
+							"You must fill every field to complete the data insertion. Try again.");
+				} else {
+					float price = 0.0f;
+					int quantity = 0;
+					try {
+						price = Float.parseFloat(jtPrice.getText());
+						product.setName(jtName.getText());
+						product.setCategory(jtCat.getText());
+						product.setDescription(jtDescription.getText());
+						product.setImage(url);
+						product.setPrice(price);
+						product.setQuantity(quantity);
+						SQL_Methods.updateProduct(product);
+						ProductAndSupplier.refreshTable();
+						dispose();
+					} catch (NumberFormatException NFE) {
+						JOptionPane.showMessageDialog(null, "You are trying to use wrong format for price.");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
+			// If cancel button is pressed close the insertion view.
+
+			else if (e.getSource().equals(jbcancel)) {
+				dispose();
+			}
 		}
 	}
 }

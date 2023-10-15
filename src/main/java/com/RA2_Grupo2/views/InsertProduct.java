@@ -1,14 +1,26 @@
 package com.RA2_Grupo2.views;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
@@ -17,137 +29,201 @@ import com.RA2_Grupo2.objects.Product;
 @SuppressWarnings("serial")
 public class InsertProduct extends JFrame {
 
-	private JTextField name, description, image, quantity;
-	private JButton insertButton;
-	private JButton backButton;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_5;
-	private JTextField category;
-	private JTextField price;
+	// Attributes declaration.
+
+	private JLabel jlName, jlDescription, jlCat, jlPrice, jlImg;
+	private JTextField jtName, jtCat, jtPrice;
+	private JTextArea jtDescription;
+	private JScrollPane jsDescription;
+	private JButton jbselector, jbconfirm, jbcancel;
+
+	public static String url = "src/main/resources/defaultImages/default.png";
+
+	// Constructor.
 
 	public InsertProduct() {
-		setTitle("INSERTAR PRODUCTO");
-		setSize(519, 340);
+
+		// Frame Properties.
+
+		super("Insert");
+		setSize(400, 455);
 		WindowsPreset.windowPreset(this);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 
-		name = new JTextField();
-		name.setToolTipText("NOMBRE");
-		name.setEditable(true);
-		name.setBounds(33, 55, 163, 36);
-		name.setColumns(10);
-		getContentPane().add(name);
+		// Label's & TextField's configurations.
 
-		description = new JTextField();
-		description.setToolTipText("DESCRIPCIÓN");
-		description.setEditable(true);
-		description.setBounds(229, 55, 163, 55);
-		description.setColumns(10);
-		getContentPane().add(description);
+		jlName = new JLabel("Name:");
+		jlName.setBounds(10, 40, 175, 35);
+		jlName.setHorizontalAlignment(SwingConstants.CENTER);
+		jlName.setBackground(Color.GRAY);
+		getContentPane().add(jlName);
+		jtName = new JTextField();
+		jtName.setBounds(185, 40, 193, 35);
+		jtName.setColumns(10);
+		jtName.setToolTipText("Insert name");
+		getContentPane().add(jtName);
 
-		image = new JTextField();
-		image.setEditable(true);
-		image.setBounds(229, 152, 163, 36);
-		image.setColumns(10);
-		getContentPane().add(image);
+		jlCat = new JLabel("Category:");
+		jlCat.setBounds(10, 85, 175, 35);
+		jlCat.setHorizontalAlignment(SwingConstants.CENTER);
+		jlCat.setBackground(Color.GRAY);
+		getContentPane().add(jlCat);
+		jtCat = new JTextField();
+		jtCat.setBounds(185, 85, 193, 35);
+		jtCat.setColumns(10);
+		jtCat.setToolTipText("Insert category");
+		getContentPane().add(jtCat);
 
-		insertButton = new JButton("INSERTAR PRODUCTO");
-		insertButton.setBounds(301, 227, 169, 48);
-		insertButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				insertProduct();
-			}
-		});
-		getContentPane().add(insertButton);
+		jlPrice = new JLabel("Price:");
+		jlPrice.setBounds(10, 130, 175, 35);
+		jlPrice.setHorizontalAlignment(SwingConstants.CENTER);
+		jlPrice.setBackground(Color.GRAY);
+		getContentPane().add(jlPrice);
+		jtPrice = new JTextField();
+		jtPrice.setBounds(185, 130, 193, 35);
+		jtPrice.setColumns(10);
+		jtPrice.setHorizontalAlignment(SwingConstants.CENTER);
+		jtPrice.setToolTipText("Insert price");
+		getContentPane().add(jtPrice);
 
-		backButton = new JButton("VOLVER");
-		backButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				@SuppressWarnings("unused")
-				ProductAndSupplier m = new ProductAndSupplier();
-				dispose();
-			}
-		});
-		backButton.setBounds(410, 10, 85, 21);
-		getContentPane().add(backButton);
+		jlDescription = new JLabel("Description:");
+		jlDescription.setBounds(10, 192, 175, 35);
+		jlDescription.setHorizontalAlignment(SwingConstants.CENTER);
+		jlDescription.setBackground(Color.GRAY);
+		getContentPane().add(jlDescription);
+		jtDescription = new JTextArea();
+		jtDescription.setColumns(10);
+		jtDescription.setToolTipText("Insert description");
+		jsDescription = new JScrollPane(jtDescription);
+		jsDescription.setBounds(185, 175, 193, 70);
+		getContentPane().add(jsDescription);
 
-		lblNewLabel = new JLabel("NOMBRE");
-		lblNewLabel.setBounds(33, 43, 94, 13);
-		getContentPane().add(lblNewLabel);
+		jlImg = new JLabel("Image:");
+		jlImg.setBounds(10, 255, 175, 35);
+		jlImg.setHorizontalAlignment(SwingConstants.CENTER);
+		jlImg.setBackground(Color.GRAY);
+		getContentPane().add(jlImg);
 
-		lblNewLabel_1 = new JLabel("DESCRIPCIÓN");
-		lblNewLabel_1.setBounds(229, 43, 94, 13);
-		getContentPane().add(lblNewLabel_1);
+		// Button's configurations.
 
-		lblNewLabel_2 = new JLabel("IMAGEN");
-		lblNewLabel_2.setBounds(229, 137, 141, 13);
-		getContentPane().add(lblNewLabel_2);
+		// Handler.
 
-		JButton selectImageButton = new JButton("...");
-		selectImageButton.setBounds(402, 159, 43, 21);
-		getContentPane().add(selectImageButton);
+		bHandler handler = new bHandler();
 
-		JLabel lblNewLabel_3 = new JLabel("PRECIO");
-		lblNewLabel_3.setBounds(33, 221, 76, 13);
-		getContentPane().add(lblNewLabel_3);
+		// Button to select the image.
 
-		JLabel lblNewLabel_4 = new JLabel("CATEGORÍA");
-		lblNewLabel_4.setBounds(33, 137, 94, 13);
-		getContentPane().add(lblNewLabel_4);
+		jbselector = new JButton("Select Image");
+		jbselector.setToolTipText("Open JFileChooser");
+		jbselector.setBounds(185, 255, 193, 35);
+		jbselector.setBackground(Color.LIGHT_GRAY);
+		getContentPane().add(jbselector);
+		jbselector.addActionListener(handler);
 
-		lblNewLabel_5 = new JLabel("CANTIDAD");
-		lblNewLabel_5.setBounds(229, 221, 67, 13);
-		getContentPane().add(lblNewLabel_5);
+		// Button to confirm the insertion.
 
-		quantity = new JTextField();
-		quantity.setBounds(229, 234, 62, 36);
-		getContentPane().add(quantity);
-		quantity.setColumns(10);
+		jbconfirm = new JButton();
+		jbconfirm.setBounds(235, 320, 65, 65);
+		WindowsPreset.buttonPreset(jbconfirm, "Insert the product", "src/main/resources/icons/confirmar.png");
+		jbconfirm.setBackground(new Color(89, 166, 89));
+		jbconfirm.addActionListener(handler);
+		getContentPane().add(jbconfirm);
 
-		category = new JTextField();
-		category.setBounds(31, 152, 165, 36);
-		getContentPane().add(category);
-		category.setColumns(10);
+		// Button to cancel the insertion.
 
-		price = new JTextField();
-		price.setBounds(33, 235, 165, 33);
-		getContentPane().add(price);
-		price.setColumns(10);
+		jbcancel = new JButton();
+		jbcancel.setBounds(100, 320, 65, 65);
+		WindowsPreset.buttonPreset(jbcancel, "Cancel", "src/main/resources/icons/volver.png");
+		jbcancel.setBackground(new Color(166, 89, 89));
+		jbcancel.addActionListener(handler);
+		getContentPane().add(jbcancel);
 
 		setVisible(true);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
-	public void insertProduct() {
-		if (name.getText().isBlank() || description.getText().isBlank() || category.getText().isBlank()
-				|| price.equals("")) {
-			JOptionPane.showMessageDialog(null,
-					"Para introducir un producto a la base de datos debe rellenar todos los datos", "",
-					JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			int res = JOptionPane.showConfirmDialog(null,
-					"¿Está seguro de querer añadir el producto a la base de datos?", "AÑADIR PRODUCTO",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (res == 0) {
-				Product newP = new Product(name.getText(), description.getText(), Float.parseFloat(price.getText()),
-						Integer.parseInt(quantity.getText()), category.getText(), "test");
-				try {
-					newP.setId(SQL_Methods.getMaxIdFromTable("products") + 1);
-					SQL_Methods.insertProduct(newP);
-					JOptionPane.showMessageDialog(null, "Producto añadido correctamente.", "PRODUCTO AÑADIDO",
-							JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+	// Handler implementation.
+
+	private class bHandler implements ActionListener {
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(jbselector)) {
+
+				/*
+				 * Configuration of the selector, creation of the image and adding it to the
+				 * entity and local files.
+				 */
+
+				JFileChooser jfc = new JFileChooser();
+				jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG, PNG & GIF Images", "jpg", "gif",
+						"png");
+				jfc.setFileFilter(filter);
+				int selection = jfc.showOpenDialog(null);
+				File img1 = jfc.getSelectedFile();
+				getContentPane().add(jfc);
+				jfc.setVisible(true);
+
+				/*
+				 * When the JFileChooser select an image, the program create it with an non
+				 * repeatable absolute path.
+				 */
+
+				if (JFileChooser.APPROVE_OPTION == selection) {
+					Date d = new Date();
+					url = "src/main/resources/images/" + jtName.getText().replace(" ", "_") + "_" + d.getYear()
+							+ d.getTime() + ".jpg";
+					Path p = Path.of(url).toAbsolutePath();
+					try {
+						Files.copy(img1.toPath(), p, StandardCopyOption.REPLACE_EXISTING);
+					} catch (IOException IOE) {
+						IOE.printStackTrace();
+					}
+					jfc.setVisible(false);
+
+					// If selector is canceled, the program load a default image.
+
+				} else if (JFileChooser.CANCEL_OPTION == selection) {
+					url = "src/main/resources/defaultImages/default.png";
+					jfc.setVisible(false);
+
 				}
-			} else
-				JOptionPane.showMessageDialog(null, "Se ha cancelado la operación para añadir producto.",
-						"AÑADIR PRODUCTO CANCELADO", JOptionPane.INFORMATION_MESSAGE);
+			}
+
+			/*
+			 * If the confirm button is pressed, check null values, format exception and do
+			 * the insert.
+			 */
+
+			else if (e.getSource().equals(jbconfirm)) {
+				if (jtDescription.getText().isBlank() || jtName.getText().isBlank() || jtCat.getText().isBlank()
+						|| jtPrice.getText().isBlank()) {
+					JOptionPane.showMessageDialog(getContentPane(),
+							"You must fill every field to complete the data insertion. Try again.");
+				} else {
+					try {
+						float price = Float.parseFloat(jtPrice.getText());
+						int id = SQL_Methods.getMaxIdFromTable("products");
+						Product p = new Product(jtName.getText(), jtDescription.getText(), price, 0, jtCat.getText(),
+								url);
+						p.setId(id + 1);
+						SQL_Methods.insertProduct(p);
+						ProductAndSupplier.refreshTable();
+						dispose();
+					} catch (NumberFormatException NFE) {
+						JOptionPane.showMessageDialog(null, "You are trying to use wrong format for price.");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+
+			// Button to cancel the insertion and go back.
+
+			else if (e.getSource().equals(jbcancel)) {
+				dispose();
+			}
 		}
 	}
 }

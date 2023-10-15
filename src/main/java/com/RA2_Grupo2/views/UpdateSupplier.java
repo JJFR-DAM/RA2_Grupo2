@@ -3,6 +3,8 @@ package com.RA2_Grupo2.views;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -80,8 +82,50 @@ public class UpdateSupplier extends JFrame {
 		jtAddress.setText(s.getAddress());
 		jsAddress = new JScrollPane(jtAddress);
 		jsAddress.setBounds(185, 130, 193, 70);
-		;
 		getContentPane().add(jsAddress);
+		jtAddress.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == 10) {
+
+					/*
+					 * If enter key is pressed check every field has been filled, update the supply
+					 * and refresh the table.
+					 */
+
+					if (e.getSource().equals(jbconfirm)) {
+						if (jtAddress.getText().isBlank() || jtName.getText().isBlank()
+								|| jtPhone.getText().isBlank()) {
+							JOptionPane.showMessageDialog(getContentPane(),
+									"You must fill every field to complete the data insertion. Try again.");
+						} else {
+							s.setName(jtName.getText());
+							s.setAddress(jtAddress.getText());
+							s.setPhone(jtPhone.getText());
+							try {
+								SQL_Methods.updateSupplier(s);
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+							ProductAndSupplier.refreshTable();
+							dispose();
+						}
+					}
+				}
+
+			}
+		});
 
 		// Button's configurations.
 
