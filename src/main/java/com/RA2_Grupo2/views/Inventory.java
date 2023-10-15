@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.RA2_Grupo2.methods.PDF_methods;
 import com.RA2_Grupo2.methods.SQL_Methods;
 import com.RA2_Grupo2.methods.WindowsPreset;
 import com.RA2_Grupo2.objects.Product;
@@ -27,7 +28,7 @@ public class Inventory extends JFrame {
 
 	private JPanel ptable, pbutton;
 	public static JTable table;
-	private JButton bProductAndSupplier, bTransaction, bLogout;
+	private JButton bProductAndSupplier, bTransaction, bPdf, bLogout;
 	private JScrollBar scrollBar;
 
 	private static List<Product> listP = new ArrayList<>();
@@ -85,7 +86,7 @@ public class Inventory extends JFrame {
 		// Button for open Inventory.
 
 		bProductAndSupplier = new JButton();
-		bProductAndSupplier.setBounds(253, 10, 65, 65);
+		bProductAndSupplier.setBounds(198, 10, 65, 65);
 		WindowsPreset.buttonPreset(bProductAndSupplier, "Open product and supplier management.",
 				"src/main/resources/icons/almacen.png");
 		bProductAndSupplier.addActionListener(handler);
@@ -93,7 +94,7 @@ public class Inventory extends JFrame {
 		// Button for open Transactions.
 
 		bTransaction = new JButton();
-		bTransaction.setBounds(358, 10, 65, 65);
+		bTransaction.setBounds(308, 10, 65, 65);
 		WindowsPreset.buttonPreset(bTransaction, "Open transactions history.",
 				"src/main/resources/icons/transaccion.png");
 		bTransaction.addActionListener(handler);
@@ -101,15 +102,23 @@ public class Inventory extends JFrame {
 		// Button for close the program.
 
 		bLogout = new JButton();
-		bLogout.setBounds(138, 10, 65, 65);
+		bLogout.setBounds(88, 10, 65, 65);
 		WindowsPreset.buttonPreset(bLogout, "Logout", "src/main/resources/icons/cerrar-sesion.png");
 		bLogout.addActionListener(handler);
+
+		// Button for create the PDF with the inventory and transactions.
+
+		bPdf = new JButton();
+		bPdf.setBounds(418, 10, 65, 65);
+		WindowsPreset.buttonPreset(bPdf, "Generate a PDF", "src/main/resources/icons/pdf.png");
+		bPdf.addActionListener(handler);
 
 		pbutton.setLayout(null);
 		pbutton.setBackground(Color.LIGHT_GRAY);
 		pbutton.add(bProductAndSupplier);
 		pbutton.add(bTransaction);
 		pbutton.add(bLogout);
+		pbutton.add(bPdf);
 
 		getContentPane().add(pbutton);
 
@@ -176,6 +185,12 @@ public class Inventory extends JFrame {
 			else if (e.getSource().equals(bTransaction)) {
 				dispose();
 				TransactionHistory th = new TransactionHistory();
+			}
+
+			// Create the PDF.
+
+			else if (e.getSource().equals(bPdf)) {
+				PDF_methods.createDocument();
 			}
 
 			// Go back to the login.
