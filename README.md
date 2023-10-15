@@ -21,6 +21,8 @@ press import and select the ra2_grupo2.sql file to cread the database.
 Once you have follow this steps, you can open the application. When you run test it open the login view when you can select between register or login
 if you do the login, the application will open the inventory view, you can navigate between Product&Supplier or TransactionHistory views.
 
+Note: I have created a default user, you can use it login with NIF/email -> "11111111A"/"admin@gmail.com" and password -> "123456"
+
 In Product&Supplier view you will find a selector to change between product and supply, buttons to CRUD the object. In product option, you can filter by
 name, category or price.
 
